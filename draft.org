@@ -1,0 +1,128 @@
+# Draft of articles documenting Spacewar.
+
+* Rationale
+  Creating a full-fledged video game is an entertaining way to learn
+  new languages, new libraries, and tackle moderately challenging
+  problems. The more complex the game's rules and features are, the
+  harder the problems to solve on the way. In Spacewar for instance,
+  the play field was initially a simple rectangular map. Rather
+  quickly however, running into the map borders was frustrating the
+  players, thus the map was changed to a tore. Having to wrap objects
+  around the map is easy to handle, but doing so seamlessly as to not
+  distract the player requires more ingenuity. Once you add collisions
+  detection around the map borders, then the problem gets really
+  interesting.
+
+  Solving such problems in a game setting is satisfying because every
+  time you do so, you can jump into the game and enjoy a new feature or
+  one less bug, leading to a more enjoyable experience. Besides, some
+  problems may lead to elegant solutions, and those are rewarding on
+  their own.
+
+  The idea behind Spacewar was to make an engaging multiplayer browser
+  game in a space setting, leveraging current Web standards
+  developments. Being a browser game, it follows a minimalistic design
+  philosophy in order to accommodate the short attention span of the
+  medium. This minimalism is perceptible even in the game pitch, which
+  fit in one line:
+
+  #+BEGIN_QUOTE
+  "You are in space. Shoot other ships before they shoot you."
+  #+END_QUOTE
+
+  Similarly, the graphics are voluntarily bare, as to let players
+  focus on gameplay, rather than fancy visual effects. This decision
+  also bears the advantage of not requiring strong graphical skills,
+  which we do not possess. Furthermore, the space setting can be used
+  as an excuse for not having any sounds or music. Though it does not
+  imply that every aspect of the game can be justified by the physical
+  laws of space. This is still a video game, and one bereft of any
+  pretension other than unadulterated fun.
+
+  There were at least two reasons justifying the multiplayer aspect of
+  the game. Firstly, playing a game with human opponents is more
+  engaging than a solitary game, or than a game played against
+  computer AIs. Game AIs have a tendency to be predictable at best,
+  and laughable at worst. While having a fearful AI in the game is a
+  very inspiring problem in itself, we wanted to entertain human
+  players first. Since designing the game mechanics and an AI at the
+  same time could lead to compromises in gameplay to fit the AI
+  capabilities, we decided to favor the mechanics and to take
+  advantage of humans' adaptability. The second reason to have
+  multiplayer was to get acquainted with the WebSocket protocol, part
+  of the HTML5 working standard. This recent development of web
+  technologies allows stable and efficient bidirectional communication
+  between a browser and a server over the HTTP protocol. A multiplayer
+  game involves frequent communications between clients and the
+  server: more than fifty updates are broadcasted to clients every
+  second. Therefore, a frantic multiplayer game with WebSockets would
+  stand as a strong testimony of the protocol robustness.
+
+  [Transition]
+
+* Other works
+  - Lazeroids
+  - Rawkets
+  - Swarmnation
+  - Lichess
+
+* The technology behind Spacewar
+
+** HTML5 standard
+
+The HTML5 standard
+
+*** Javascript
+   - Functional
+   - Asynchronous
+
+*** Coffeescript
+    CoffeeScript is a language by Jeremy Ashkenas [ref] that compiles into
+    JavaScript.  
+   - More elegant Javascript
+
+*** Canvas
+    
+*** SVG
+
+*** WebSocket
+    - Older alternatives (Long polling)
+    - API
+    - Protocol
+
+** Node.js
+
+** Socket.IO
+
+* Inner workings
+
+** Overview
+   - Server handles logic, communication
+   - Client gathers input and draws
+
+** Game logic
+*** Update loop
+*** Collisions
+
+** Client-server communication
+*** Handling connections
+*** Handling messages
+*** Handling disconnections
+
+** Drawing
+
+* History
+** Websocket/PHP prototype
+
+* Acknowledgments
+  Adrien, David, Thibaut pour l'idée
+  Merwan
+
+* Links
+** WebSocket Protocol
+  - [[http://tools.ietf.org/html/rfc6202][Known Issues and Best Practices for Long Polling]], April 2011
+  - [[http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-07][The WebSocket protocol standards draft]], April 22, 2011
+  - [[http://dev.w3.org/html5/websockets/][The WebSocket API]], May 21, 2011
+
+** HTML5 drawing
+  - [[http://webstuff.nfshost.com/anim-timing/Overview.html][Timing control for script-based animations]], February 22, 2011
