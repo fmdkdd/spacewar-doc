@@ -3,12 +3,12 @@
 * Rationale
   Creating a full-fledged video game is an entertaining way to learn
   new languages, new libraries, and tackle moderately challenging
-  problems. The more complex the game's rules and features are, the
-  harder the problems to solve on the way. In Spacewar for instance,
-  the play field was initially a simple rectangular map. Rather
-  quickly however, running into the map borders was frustrating the
-  players, thus the map was changed to a tore. Having to wrap objects
-  around the map is easy to handle, but doing so seamlessly as to not
+  problems. The more complex the game's rules and features, the harder
+  the problems to solve on the way. In Spacewar for instance, the play
+  field was initially a simple rectangular map. Rather quickly
+  however, running into the map borders was frustrating the players,
+  thus the map was changed to a tore. Having to wrap objects around
+  the map is easy to handle, but doing so seamlessly as to not
   distract the player requires more ingenuity. Once you add collisions
   detection around the map borders, then the problem gets really
   interesting.
@@ -39,8 +39,8 @@
   laws of space. This is still a video game, and one bereft of any
   pretension other than unadulterated fun.
 
-  There were at least two reasons justifying the multiplayer aspect of
-  the game. Firstly, playing a game with human opponents is more
+  The multiplayer aspect of the game was justified by at least two
+  reasons. Firstly, playing a game with human opponents is more
   engaging than a solitary game, or than a game played against
   computer AIs. Game AIs have a tendency to be predictable at best,
   and laughable at worst. While having a fearful AI in the game is a
@@ -70,29 +70,82 @@
 
 ** HTML5 standard
 
-The HTML5 standard
+*** JavaScript
+    JavaScript is the programming language of web browsers. It started
+    off as a modest scripting language used to enhance the
+    possibilities of web designers in the mid 90's. Although it became
+    widely adopted by websites, it was not overly popular with
+    visitors who came to associate JavaScript with cascading popups
+    windows and obnoxious animations. The language gained recognition
+    in recent years, with the advent of Ajax techniques and the
+    maturity of JavaScript frameworks and libraries such as jQuery,
+    CommonJS, or ..? Most websites today use JavaScript in a variety
+    of ways: to add visual effects to their design (essentially
+    animations for a more dynamic web), to enhance the site
+    accessibility (visual and oral clues to help visitors with
+    disabilities), or to offer a more solid user interface for web
+    applications (as in most major webmail providers).
 
-*** Javascript
-   - Functional
-   - Asynchronous
+    #+BEGIN_QUOTE
+    "... or something worse would have happened."
+    #+END_QUOTE
+
+    Fifteen years after its inception, the language has grown to offer
+    a wide array of features, for professional and amateurs
+    programmers alike. Some of those features were inspired by the
+    Scheme language, notably the first-class functions, weak typing
+    and closures. The Self language was an other parent, providing the
+    prototype-based inheritance. Although both [verify] are
+    idealistic, clean languages, JavaScript syntax is akin to the C
+    and Java family. A convenient choice, since these are still the
+    most popular programming languages, and their syntax is widely
+    recognized by coders of all backgrounds. One last prominent[?]
+    feature of the language is its capability for asynchronous
+    programming without explicit thread handling. Any function can be
+    scheduled for a later execution, without blocking the program
+    flow. All the thread management is handled behind the scene by the
+    virtual machine running the program, typically hosted by the web
+    browser. This allows event-driven and concurrent applications to
+    be easily written, since the facilities are built-in.
+
+    Still, like any programming language, JavaScript is not devoid of
+    flaws.
+
+    - Verbosity of Prototypes
+    - Evil globals
+    - this in callback
+    - .. see CoffeeScript improvements
 
 *** Coffeescript
     CoffeeScript is a language by Jeremy Ashkenas [ref] that compiles into
-    JavaScript.  
-   - More elegant Javascript
+    JavaScript. 
+
+   - More elegant Javascript, more expressive
+   - Generally clearer (optional parentheses excepted)   
 
 *** Canvas
+    - HTML element designed for drawing
+    - 2d/3d context with bare operations
+    - Hardware acceleration
     
 *** SVG
+    - Vector graphics
 
 *** WebSocket
-    - Older alternatives (Long polling)
+    - Older, inefficient alternatives (Long polling)
+    - Like TCP, with added security and stability
     - API
     - Protocol
 
 ** Node.js
+   - Designed for efficient and easy concurrency for server apps
+   - Immature, but growing
+   - Tons of modules
 
 ** Socket.IO
+   - Module of node
+   - Handles every technique in the book for establishing
+     bi-directional communication
 
 * Inner workings
 
@@ -101,22 +154,41 @@ The HTML5 standard
    - Client gathers input and draws
 
 ** Game logic
+
 *** Update loop
+    - Move
+    - Check collisions
+    - Update
+
 *** Collisions
+    - Spatial hashing
+    - Symmetrical treatment
 
 ** Client-server communication
+   - Keeping objects in sync
+   - Minimizing communication overhead
+
 *** Handling connections
 *** Handling messages
 *** Handling disconnections
 
 ** Drawing
+   - DrawInfinity infinite tricks
+   - Out of view checks
+   - Clipping, double buffering
 
 * History
 ** Websocket/PHP prototype
 
+* Future improvements
+ - Allow thousand game instances running on server cluster
+ - Optimize client drawing
+ - Optimize server update
+ - Compatibility with touch devices
+   
 * Acknowledgments
-  Adrien, David, Thibaut pour l'idée
-  Merwan
+  - Adrien, David, Thibaut for the spark
+  - Merwan for the gas
 
 * Links
 ** WebSocket Protocol
