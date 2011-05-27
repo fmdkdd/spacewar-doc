@@ -86,10 +86,6 @@
     disabilities), or to offer a more solid user interface for web
     applications (as in most major webmail providers).
 
-    #+BEGIN_QUOTE
-    "... or something worse would have happened."
-    #+END_QUOTE
-
     Fifteen years after its inception, the language has grown to offer
     a wide array of features, for professional and amateurs
     programmers alike. Some of those features were inspired by the
@@ -108,25 +104,71 @@
     browser. This allows event-driven and concurrent applications to
     be easily written, since the facilities are built-in.
 
-    Still, like any programming language, JavaScript is not devoid of
-    flaws.
+    Still, like every programming language, JavaScript has its
+    downsides. While some are due to historical reasons, notably an
+    initial implementation in 10 days by its creator, others are
+    deliberate design choices. For instance, declaration of global
+    variables is implicit, which can be the source of insidious errors
+    for unaware programmers.
 
-    - Verbosity of Prototypes
-    - Evil globals
-    - this in callback
-    - .. see CoffeeScript improvements
+    #+BEGIN_CODE
+    var foo;
+    function f() {
+       foo = 1;
+       bar = 2;
+       // do something with foo and bar
+    }
+    f();
+    // foo is 1, bar is 2
+    #+END_CODE
 
-*** Coffeescript
-    CoffeeScript is a language by Jeremy Ashkenas [ref] that compiles into
-    JavaScript. 
+    In this code snippet, foo is a global declared in the global
+    scope, but bar is also a global, although implicitly declared in
+    the scope of f. Another quirky language feature are the "==" and
+    "!=" operators which, like in PHP, do implicit type coercion. On
+    top of being inefficient (strings have to be converted for numbers
+    or vice-versa), this coercion voids the transitivity of
+    equality. The following example illustrates this problem:
 
-   - More elegant Javascript, more expressive
-   - Generally clearer (optional parentheses excepted)   
+    #+BEGIN_CODE
+    "" == 0   // true
+    0 == "0"  // true
+    "" == "0" // false
+    #+END_CODE
+    
+    Fortunately, strict equality (and inequality) operators are also
+    provided and behave rationally.
+    
+    In light of these peculiarities, seasoned JavaScript programmers
+    established a guideline of recommended JavaScript style which
+    emphasize clear and safe JavaScript programming practices [ref JS
+    Garden, Elements of Style]. Popular frameworks also tend to
+    enforce these practices and have their users follow them in order
+    to avoid errors that are hard to track. Another solution to
+    alleviate these downsides is to use another syntax that compiles
+    directly into JavaScript, bypassing the error-prone features.
 
+    CoffeeScript is a language by Jeremy Ashkenas [ref] that does just
+    that. It compiles directly into JavaScript without any overhead at
+    run-time. CoffeeScript borrows its syntax from Ruby, another
+    popular programming language in the web development
+    community. This translates into a cleaner syntax with optional
+    parentheses, where indentation delimit blocks and functions
+    instead of accolades. In addition, CoffeeScript provides syntactic
+    sugar for idiomatic operations like iterating over an object
+    properties, array comprehensions, and lambda function declaration.
+    Consequently, CoffeeScript code is more expressive than the
+    operationally equivalent JavaScript code, and time is gained both
+    when programming and reading CoffeeScript code.
+    
+    Even though Spacewar began by using JavaScript, the decision to
+    switch to CoffeeScript was easy to make for all the preceding
+    reasons.
+    
 *** Canvas
     - HTML element designed for drawing
     - 2d/3d context with bare operations
-    - Hardware acceleration
+    - Hardware acceleration (chrome)
     
 *** SVG
     - Vector graphics
@@ -184,11 +226,13 @@
  - Allow thousand game instances running on server cluster
  - Optimize client drawing
  - Optimize server update
+ - Enhance compatibility with older browsers
  - Compatibility with touch devices
-   
+
 * Acknowledgments
   - Adrien, David, Thibaut for the spark
   - Merwan for the gas
+  - Bertelle, Duvallet, Sanlaville.
 
 * Links
 ** WebSocket Protocol
@@ -198,3 +242,9 @@
 
 ** HTML5 drawing
   - [[http://webstuff.nfshost.com/anim-timing/Overview.html][Timing control for script-based animations]], February 22, 2011
+
+** HTML5 book
+   http://diveintohtml5.org/
+
+** HTM5 Polyfills
+   https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-browser-Polyfills
