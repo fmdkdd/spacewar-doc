@@ -166,13 +166,63 @@
     reasons.
     
 *** Canvas
-    - HTML element designed for drawing
-    - 2d/3d context with bare operations
-    - Hardware acceleration (chrome)
-    
-*** SVG
-    - Vector graphics
+    The canvas HTML element is an important part of HTML5. It was
+    initially created by Apple for Safari and the Mac OS X Dashboard,
+    but is now implemented in all the major webbrowsers.
 
+    The intent is to provide an area on webpages upon which to draw
+    freely, as an alternative to vector graphics provided by SVG
+    (Scalable Vector Graphics). While SVG already allowed scripted
+    animations to be run freely on webpages since its initial release
+    in 2001, SVG images have to be inserted into the DOM tree, and
+    this can be a significant computation overhead if lots of SVG
+    images are inserted and removed from the DOM tree. When fast
+    animations are required, this overhead is unacceptable. Being a
+    single DOM element, the canvas provides a potentially faster way
+    to draw animation than SVG. But these two graphics solutions are
+    not interchangeable[?].
+
+    First, the canvas is bitmap-based. This means that graphics drawn
+    on the canvas are resolution dependant, whereas SVG animations are
+    freely scalable. Bitmap graphics are faster to process, thus well
+    suited to animations that require a high number of frames every
+    second, like games. Scalable graghics are great for everything
+    else, since they do not degrade in image quality when zoomed at
+    any size.
+
+    The canvas element also has the ability to use a 3d rendering
+    context, enabling OpenGL applications to be embedded in webpages
+    and rendered using a software OpenGL implementation, or even a
+    hardware one if the proper driver is present. Implementations of
+    this 3d context in major browsers is ongoing. The latest Firefox,
+    Chrome, Safari and Opera browsers support WebGL, but not on all
+    platforms. Besides, since calling the GPU driver directly can lead
+    to crashes unrelated with the browser itself (caused by faulty
+    drivers or poor graphics management in the OS), WebGL support is
+    deactivated by default in most browsers. Nonetheless, some
+    demonstrative applications already exist, with the most impressive
+    ports of famous 3d games like Quake 3 [ref] or Doom [ref].
+    
+    Finally, should web applications using canvas require even more
+    processing power for their animations, major browsers are
+    beginning to provide hardware acceleration even for the 2d drawing
+    context. This is also optional and enabled client-side, due to the
+    stability issues mentioned above, but still is a nice option to
+    have.
+
+    The consequence of providing all those facilities to web scripts,
+    both versatile with SVG and powerful with the canvas element, is
+    the diminishing need for proprietary alternatives like Adobe Flash
+    or Microsoft Silverlight. A few year back, Adobe Flash was the de
+    facto standard for web animations. Today, with browsers adopting
+    HTML5 standard and especially the canvas element, animations can
+    both be fast and portable. Furthermore, the specification is fully
+    open, as are implementations in most browsers.
+      
+    Spacewar makes full use of the canvas element. All the game is
+    currently drawn on it, and it fills the entire webpage. Some SVG
+    images are also used for the configuration menu.
+    
 *** WebSocket
     - Older, inefficient alternatives (Long polling)
     - Like TCP, with added security and stability
@@ -188,7 +238,7 @@
    - Module of node
    - Handles every technique in the book for establishing
      bi-directional communication
-
+     
 * Inner workings
 
 ** Overview
