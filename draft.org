@@ -71,45 +71,46 @@
 ** HTML5 standard
 
 *** JavaScript
-    JavaScript is the programming language of web browsers. It started
-    off as a modest scripting language used to enhance the
-    possibilities of web designers in the mid 90's. Although it became
-    widely adopted by websites, it was not overly popular with
-    visitors who came to associate JavaScript with cascading pop-ups
-    windows and obnoxious animations. The language gained recognition
-    in recent years, with the advent of Ajax techniques and the
-    maturity of JavaScript frameworks and libraries such as jQuery,
-    CommonJS, or [?] Most websites today use JavaScript in a variety
-    of ways: to add visual effects to their design (essentially
-    animations for a more dynamic web), to enhance the site
-    accessibility (visual and oral clues to help visitors with
-    disabilities), or to offer a more solid user interface for web
-    applications (as in most major webmail providers).
+    JavaScript is the programming language of web browsers. Introduced
+    by Netscape for their Navigator, it started off as a modest
+    scripting language used to enhance the possibilities of web
+    designers in the mid 90's. Although it became widely adopted by
+    websites, it was not overly popular with visitors who came to
+    associate JavaScript with cascading pop-ups windows and obnoxious
+    animations. The language gained recognition in recent years, with
+    the advent of Ajax techniques and the maturity of JavaScript
+    frameworks and libraries such as jQuery, CommonJS, or [?]. Most
+    websites today use JavaScript in a variety of ways: to add visual
+    effects to their design (essentially animations for a more dynamic
+    web), to enhance the site accessibility (visual and oral clues to
+    help visitors with disabilities), or to offer a more solid user
+    interface for web applications (as in most major webmail
+    providers).
 
     Fifteen years after its inception, the language has grown to offer
     a wide array of features, for professional and amateurs
     programmers alike. Some of those features were inspired by the
     Scheme language, notably the first-class functions, weak typing
     and closures. The Self language was an other parent, providing the
-    prototype-based inheritance. Although both [verify] are
-    idealistic, clean languages, JavaScript syntax is akin to the C
-    and Java family. A convenient choice, since these are still the
-    most popular programming languages, and their syntax is widely
-    recognized by coders of all backgrounds. One last prominent
-    feature of the language is its capability for asynchronous
-    programming without explicit thread handling. Any function can be
-    scheduled for a later execution, without blocking the program
-    flow. All the thread management is handled behind the scene by the
-    virtual machine running the program, typically hosted by the web
-    browser. This allows event-driven and concurrent applications to
-    be easily written, since the facilities are built-in.
+    prototype-based inheritance. Although both are idealistic, clean
+    languages, JavaScript syntax is akin to the C and Java family. A
+    convenient choice, since these are still the most popular
+    programming languages, and their syntax is widely recognized by
+    coders of all backgrounds. One last prominent feature of the
+    language is its capability for asynchronous programming without
+    explicit thread handling. Any function can be scheduled for a
+    later execution, without blocking the program flow. All the thread
+    management is handled behind the scene by the virtual machine
+    running the program, typically hosted by the web browser. This
+    allows event-driven and concurrent applications to be easily
+    written, since the facilities are built-in.
 
     Still, like every programming language, JavaScript has its
     downsides. While some are due to historical reasons, notably an
-    initial implementation in 10 days by its creator, others are
-    deliberate design choices. For instance, declaration of global
-    variables is implicit, which can be the source of insidious errors
-    for unaware programmers.
+    initial implementation in 10 days by its creator, Brendan Eich,
+    others are deliberate design choices. For instance, declaration of
+    global variables is implicit, which can be the source of insidious
+    errors for unaware programmers.
 
     #+BEGIN_CODE
     var foo;
@@ -127,7 +128,7 @@
     the scope of f. Another quirky language feature are the "==" and
     "!=" operators which, like in PHP, do implicit type coercion. On
     top of being inefficient (strings have to be converted for numbers
-    or vice-versa), this coercion voids the transitivity of
+    or vice versa), this coercion voids the transitivity of
     equality. The following example illustrates this problem:
 
     #+BEGIN_CODE
@@ -150,7 +151,7 @@
 
     CoffeeScript is a language by Jeremy Ashkenas [ref] that does just
     that. It compiles directly into JavaScript without any overhead at
-    run-time. CoffeeScript borrows its syntax from Ruby, another
+    run-time. CoffeeScript borrows its syntax from Ruby [ref], another
     popular programming language in the web development
     community. This translates into a cleaner syntax with optional
     parentheses, where indentation delimit blocks and functions
@@ -168,7 +169,9 @@
 *** Canvas
     The canvas HTML element is an important part of HTML5. It was
     initially created by Apple for Safari and the Mac OS X Dashboard,
-    but is now implemented in all the major web browsers.
+    but is now implemented in all the major web browsers [fn:: By
+    major web browsers, we mean Firefox, Chrome, Internet Explorer,
+    Safari and Opera.]
 
     The intent is to provide an area on web pages upon which to draw
     freely, as an alternative to vector graphics provided by SVG
@@ -198,10 +201,12 @@
     Chrome, Safari and Opera browsers support WebGL, but not on all
     platforms. Besides, since calling the GPU driver directly can lead
     to crashes unrelated with the browser itself (caused by faulty
-    drivers or poor graphics management in the OS), WebGL support is
-    deactivated by default in most browsers. Nonetheless, some
-    demonstrative applications already exist, with the most impressive
-    ports of famous 3d games like Quake 3 [ref] or Doom [ref].
+    drivers or poor graphics management in the OS), WebGL support can
+    be deactivated by default in some browsers, or for unsupported
+    hardware. Nonetheless, some demonstrative applications already
+    exist, with the most impressive being ports of famous 3d games
+    like this Quake 3 level loader [ref] or this interactive film by
+    Chris Milk [ref].
     
     Finally, should web applications using canvas require even more
     processing power for their animations, major browsers are
@@ -286,8 +291,8 @@
 
 * Links
 ** JavaScript
-   - [[http://javascript.crockford.com/code.html][Code Conventions for the JavaScript Programming Language]], Douglas
-     Crockford, 20??
+   -
+     [[https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml][Google JavaScript Style Guide]], Aaron Whyte et al.
    - [[http://bonsaiden.github.com/JavaScript-Garden/][JavaScript Garden]], Ivo Wetzel and Zhang Yi Jiang, 2011.
    - [[http://coffeescript.org/][CoffeeScript]], Jeremy Ashkenas.
 
@@ -301,6 +306,7 @@
   - [[http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#the-canvas-element][HTML Standard: the canvas element]], May 27, 2011
   - [[http://www.khronos.org/registry/webgl/specs/latest/#7][WebGL Specification]], May 25, 2011
   - [[http://media.tojicode.com/q3bsp/][Quake 3 WebGL Demo]], Brandon Jones.
+  - [[http://www.ro.me][ROME, "3 Dreams of Black"]], Chris Milk.
 
 ** HTML5 book
    http://diveintohtml5.org/
