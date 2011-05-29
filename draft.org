@@ -112,16 +112,16 @@
     global variables is implicit, which can be the source of insidious
     errors for unaware programmers.
 
-    #+BEGIN_CODE
-    var foo;
-    function f() {
-       foo = 1;
-       bar = 2;
-       // do something with foo and bar
-    }
-    f();
-    // foo is 1, bar is 2
-    #+END_CODE
+    #+BEGIN_SRC espresso
+      var foo;
+      function f() {
+         foo = 1;
+         bar = 2;
+         // do something with foo and bar
+      }
+      f();
+      // foo is 1, bar is 2
+    #+END_SRC
 
     In this code snippet, foo is a global declared in the global
     scope, but bar is also a global, although implicitly declared in
@@ -131,11 +131,11 @@
     or vice versa), this coercion voids the transitivity of
     equality. The following example illustrates this problem:
 
-    #+BEGIN_CODE
-    "" == 0   // true
-    0 == "0"  // true
-    "" == "0" // false
-    #+END_CODE
+    #+BEGIN_SRC espresso
+      "" == 0   // true
+      0 == "0"  // true
+      "" == "0" // false
+    #+END_SRC
     
     Fortunately, strict equality (and inequality) operators are also
     provided and behave rationally.
@@ -229,6 +229,13 @@
     images are also used for the configuration menu.
     
 *** WebSocket
+    The major part of Spacewar is its multiplayer aspect: having
+    multiple players participating in the same game, each using a
+    different browser on their own computer. This is enabled by the
+    introduction of WebSockets to HTML5.
+
+    
+    
     - Older, inefficient alternatives (Long polling)
     - Like TCP, with added security and stability
     - API
@@ -291,8 +298,7 @@
 
 * Links
 ** JavaScript
-   -
-     [[https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml][Google JavaScript Style Guide]], Aaron Whyte et al.
+   - [[https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml][Google JavaScript Style Guide]], Aaron Whyte et al.
    - [[http://bonsaiden.github.com/JavaScript-Garden/][JavaScript Garden]], Ivo Wetzel and Zhang Yi Jiang, 2011.
    - [[http://coffeescript.org/][CoffeeScript]], Jeremy Ashkenas.
 
