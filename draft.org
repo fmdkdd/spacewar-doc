@@ -166,6 +166,93 @@
     switch to CoffeeScript was easy to make for all the preceding
     reasons.
     
+*** WebSocket
+    The major part of Spacewar is its multiplayer aspect: having
+    multiple players participating in the same game, each using a
+    different browser on their own computer. This is enabled by the
+    introduction of WebSockets to HTML5.
+
+    The HTTP protocol was conceived as a unidirectional protocol: from
+    the client to the server. The server can not initiate an
+    unsolicited connection with a client, and is only allowed to send
+    data to the client in response to a previous request from the
+    client. Yet, asynchronous updates from the server have become a
+    major part of today's web browsing. The usual solution is to abuse
+    the protocol in part, by having the client frequently poll the
+    server for updates. Typically, the client would send a request to
+    the server every two seconds, and the server would respond with
+    update data, or with an empty response if no update occurred. This
+    is a simple way to provide the illusion of asynchronous updates,
+    but it comes at a price. 
+
+    To receive update in a timely fashion, the polling frequency
+    should be short, around 5 seconds. This means that every 5
+    seconds, a HTTP request is sent to the server, and a response is
+    received. Sending a new HTTP request requires establishing a TCP
+    connection with the server, and that in turn takes some round
+    trips between the client and the server. In addition, the request
+    and response have to contain HTTP headers that add to the packets'
+    size, though the information they transmit is mostly the same each
+    time. This short polling technique is thus very inefficient, as
+    not only time is wasted by setting up a full TCP communication
+    each time, but bandwidth is also squandered.
+
+    To alleviate these problems, more refined techniques have come to
+    light. The two most common mechanisms are known as HTTP long
+    polling and HTTP streaming. Both are described RFC 6202 [ref]. As
+    the name implies, long polling consists of sending a request to
+    the server, who will delay its response until there is data to
+    transmit. When the client receives the response, it immediately
+    sends a new request for the next update. In HTTP streaming, the
+    server sends its response in parts, thus keeping the connection
+    with the client alive, until its renewal after a set amount of
+    time. While more efficient than short polling, both have
+    disadvantages over a straightforward TCP socket. When renewing the
+    long poll request or stream, messages can not be sent from the
+    server, and must thus be buffered until the connection is
+    established. Other difficulties may arise when intermediaries
+    (proxies, gateways) are present between the client and the
+    server, as they may decide to cache the server responses, thus
+    defeating the mechanism. Best practices for implementing these
+    techniques are described in the RFC.
+
+    A better solution is to augment the HTTP protocol, allowing true,
+    persistent bi-directional communication without much
+    overhead. That is precisely the high-level description of the
+    WebSocket protocol [ref]. This protocol consists of establishing a
+    TCP connection between a client and a server, allowing two-way
+    message passing after an HTTP handshake part. Using the HTTP
+    request/response model, both client and server acknowledge of an
+    "HTTP upgrade" to use the WebSocket protocol. Once they agree,
+    messages can be freely sent between both entities until the
+    connection is closed. In addition to the TCP connection, the
+    WebSocket protocol provides:
+
+    #+BEGIN_QUOTE
+    - a Web "origin"-based security model for browsers;
+    - an addressing and protocol naming mechanism to support multiple
+    services on one port and multiple host names on one IP address;
+    - a framing mechanism on top of TCP to get back to the IP
+    packet mechanism that TCP is built on, but without length limits.
+    #+END_QUOTE
+
+    The WebSocket protocol enforces the same origin policy commonly
+    used in web browsers. Basically, WebSockets established between a
+    browser and a web server at http://www.foo.com/ can only be
+    accessed by scripts running for a page from a server with the same
+    domain. Scripts from other domains do not have legitimate access
+    to resources (scripts, sockets) of others.
+
+    The WebSocket API offered to web browsers scripts is rather
+    straightforward, and event-based. In simple setups, the client
+    only has to create a WebSocket object, then register function
+    callbacks for the following events: connection open, message
+    received, connection closed. The WebSocket object can be used to
+    send messages to the server, and to close the connection. Messages
+    can either be sent as UTF-8 strings or as raw binary.
+
+    [closure?]
+
 *** Canvas
     The canvas HTML element is an important part of HTML5. It was
     initially created by Apple for Safari and the Mac OS X Dashboard,
@@ -227,19 +314,6 @@
     Spacewar makes full use of the canvas element. All the game is
     currently drawn on it, and it fills the entire web page. Some SVG
     images are also used for the configuration menu.
-    
-*** WebSocket
-    The major part of Spacewar is its multiplayer aspect: having
-    multiple players participating in the same game, each using a
-    different browser on their own computer. This is enabled by the
-    introduction of WebSockets to HTML5.
-
-    
-    
-    - Older, inefficient alternatives (Long polling)
-    - Like TCP, with added security and stability
-    - API
-    - Protocol
 
 ** Node.js
    - Designed for efficient and easy concurrency for server apps
