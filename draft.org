@@ -69,6 +69,8 @@
 * The technology behind Spacewar
 
 ** HTML5 standard
+   
+   [Some introduction on W3C/WHATWG]
 
 *** JavaScript
     JavaScript is the programming language of web browsers. Introduced
@@ -165,6 +167,68 @@
     Even though Spacewar began by using JavaScript, the decision to
     switch to CoffeeScript was easy to make for all the preceding
     reasons.
+
+*** Canvas
+    The canvas HTML element is an important part of HTML5. It was
+    initially created by Apple for Safari and the Mac OS X Dashboard,
+    but is now implemented in all the major web browsers [fn:: By
+    major web browsers, we mean Firefox, Chrome, Internet Explorer,
+    Safari and Opera.]
+
+    The intent is to provide an area on web pages upon which to draw
+    freely, as an alternative to vector graphics provided by SVG
+    (Scalable Vector Graphics). While SVG already allowed scripted
+    animations to be run freely on web pages since its initial release
+    in 2001, SVG images have to be inserted into the DOM tree, and
+    this can be a significant computation overhead if lots of SVG
+    images are inserted and removed from the DOM tree. When fast
+    animations are required, this overhead is unacceptable. Being a
+    single DOM element, the canvas provides a potentially faster way
+    to draw animation than SVG. But these two graphics solutions are
+    not interchangeable.
+
+    First, the canvas is bitmap-based. This means that graphics drawn
+    on the canvas are resolution dependent, whereas SVG animations are
+    freely scalable. Bitmap graphics are faster to process, thus well
+    suited to animations that require a high number of frames every
+    second, like games. Scalable graphics are great for everything
+    else, since they do not degrade in image quality when zoomed at
+    any size.
+
+    The canvas element also has the ability to use a 3d rendering
+    context, enabling OpenGL applications to be embedded in web pages
+    and rendered using a software OpenGL implementation, or even a
+    hardware one if the proper driver is present. Implementations of
+    this 3d context in major browsers is ongoing. The latest Firefox,
+    Chrome, Safari and Opera browsers support WebGL, but not on all
+    platforms. Besides, since calling the GPU driver directly can lead
+    to crashes unrelated with the browser itself (caused by faulty
+    drivers or poor graphics management in the OS), WebGL support can
+    be deactivated by default in some browsers, or for unsupported
+    hardware. Nonetheless, some demonstrative applications already
+    exist, with the most impressive being ports of famous 3d games
+    like this Quake 3 level loader [ref] or this interactive film by
+    Chris Milk [ref].
+    
+    Finally, should web applications using canvas require even more
+    processing power for their animations, major browsers are
+    beginning to provide hardware acceleration even for the 2d drawing
+    context. This is also optional and enabled client-side, due to the
+    stability issues mentioned above, but still is a nice option to
+    have.
+
+    The consequence of providing all those facilities to web scripts,
+    both versatile with SVG and powerful with the canvas element, is
+    the diminishing need for proprietary alternatives like Adobe Flash
+    or Microsoft Silverlight. A few year back, Adobe Flash was the de
+    facto standard for web animations. Today, with browsers adopting
+    HTML5 standard and especially the canvas element, animations can
+    both be fast and portable. Furthermore, the specification is fully
+    open, as are implementations in most browsers.
+      
+    Spacewar makes full use of the canvas element. All the game is
+    currently drawn on it, and it fills the entire web page. Some SVG
+    images are also used for the configuration menu.
     
 *** WebSocket
     The major part of Spacewar is its multiplayer aspect: having
@@ -253,77 +317,97 @@
 
     [closure?]
 
-*** Canvas
-    The canvas HTML element is an important part of HTML5. It was
-    initially created by Apple for Safari and the Mac OS X Dashboard,
-    but is now implemented in all the major web browsers [fn:: By
-    major web browsers, we mean Firefox, Chrome, Internet Explorer,
-    Safari and Opera.]
+** Node
+   Obviously, WebSocket support is required both on the client and on
+   the server. On the client side, a check may be done when the game
+   script executes to detect WebSocket support in the browser, and act
+   accordingly. On the server front, the choice is more limited. The
+   early prototype of Spacewar used a PHP implementation of the
+   WebSocket protocol on the server [ref]. Back then, the server was
+   only used to pass messages around between clients. All the game
+   logic was handled by the clients themselves, and each client sent
+   its state to all the others, via the server. It quickly became
+   clear however that this PHP implementation of WebSocket was meant
+   for trivial demonstrations purposes, but not for real applications.
 
-    The intent is to provide an area on web pages upon which to draw
-    freely, as an alternative to vector graphics provided by SVG
-    (Scalable Vector Graphics). While SVG already allowed scripted
-    animations to be run freely on web pages since its initial release
-    in 2001, SVG images have to be inserted into the DOM tree, and
-    this can be a significant computation overhead if lots of SVG
-    images are inserted and removed from the DOM tree. When fast
-    animations are required, this overhead is unacceptable. Being a
-    single DOM element, the canvas provides a potentially faster way
-    to draw animation than SVG. But these two graphics solutions are
-    not interchangeable.
+   As a result of the WebSocket protocol being recent and not
+   finalized, the number of implementations outside of web browser is
+   not overwhelming, though sufficient. Although the protocol is not
+   overly complicated, implementing it was beyond the scope of
+   Spacewar. Besides, due to security concerns, the protocol is still
+   evolving. An implementation that can stay up to date with current
+   and future versions of the protocol is preferred. This essentially
+   means that the chosen WebSocket implementation should be popular
+   enough to ensure that it will be supported until at least the
+   protocol finalization. A rapid search indicates there are already
+   quite a few implementations for C, C#, Java, Ruby and JavaScript,
+   and more. The JavaScript implementation is of particular interest,
+   and was chosen for reasons we will now expose.
 
-    First, the canvas is bitmap-based. This means that graphics drawn
-    on the canvas are resolution dependent, whereas SVG animations are
-    freely scalable. Bitmap graphics are faster to process, thus well
-    suited to animations that require a high number of frames every
-    second, like games. Scalable graphics are great for everything
-    else, since they do not degrade in image quality when zoomed at
-    any size.
+   First and foremost, since JavaScript was required for programming
+   the client, having it as the server language helps promoting code
+   reuse and consistency. The code is clearer as a result, since some
+   client constructs are mirrored on the server.
+   
+   Secondly, the chosen JavaScript implementation of the WebSocket
+   protocol is actually a module for a high-performance server
+   back-end software running JavaScript code, called Node (or node.js)
+   [ref]. At the core, Node is an abstraction of asynchronous I/O with
+   a layer of web-oriented networking facilities designed for building
+   scalable web servers. Under the hood Node is running Google's V8
+   JavaScript engine, which allow users to program all their server
+   code using only JavaScript, although Node itself is essentially
+   C++.
+   
+   With the growing number of Internet users, it is not uncommon for
+   web hosts serving popular content to handle a million or more daily
+   hits, and a hundred thousand of simultaneous clients. Against such
+   numbers, very efficient server software (and hardware) is required.
+   The two main approaches for serving content at this rate in server
+   software are multithreading and asynchronous (non-blocking)
+   I/O. While allocating a thread for each client (or a group of
+   clients) and retrieving content with blocking I/O in each thread is
+   feasible, implementations of threads in most systems makes this
+   solution sub-optimal. For one, managing ten thousand threads can
+   become quite complex. In addition, the costs of thread allocating,
+   context switching and scheduling hamper this method's scalability.
 
-    The canvas element also has the ability to use a 3d rendering
-    context, enabling OpenGL applications to be embedded in web pages
-    and rendered using a software OpenGL implementation, or even a
-    hardware one if the proper driver is present. Implementations of
-    this 3d context in major browsers is ongoing. The latest Firefox,
-    Chrome, Safari and Opera browsers support WebGL, but not on all
-    platforms. Besides, since calling the GPU driver directly can lead
-    to crashes unrelated with the browser itself (caused by faulty
-    drivers or poor graphics management in the OS), WebGL support can
-    be deactivated by default in some browsers, or for unsupported
-    hardware. Nonetheless, some demonstrative applications already
-    exist, with the most impressive being ports of famous 3d games
-    like this Quake 3 level loader [ref] or this interactive film by
-    Chris Milk [ref].
-    
-    Finally, should web applications using canvas require even more
-    processing power for their animations, major browsers are
-    beginning to provide hardware acceleration even for the 2d drawing
-    context. This is also optional and enabled client-side, due to the
-    stability issues mentioned above, but still is a nice option to
-    have.
+   On the other hand, asynchronous I/O is rather straightforward:
+   instead of spawning a new lightweight process (thread) to read and
+   send a file to the client, just wait for the system to signal the
+   file readiness, and execute a callback function to read and send
+   it. The cost of handling one more client is much lower than for
+   multithreading, although not all non-blocking I/O mechanisms in the
+   OS are equal. Hardware interrupts are favored, but might not be
+   available, in which case the slower method of polling is used.
+   Nonetheless, non-blocking I/O has garnered a strong following in
+   the web development community, assessed by the popularity of server
+   software like Python's Twisted, or Ruby's EventMachine. This is
+   explained partly by the popularity of the language they are
+   implemented in, partly by the performance they provide, and mostly
+   by the convenience of their event-driven model for programmers.
 
-    The consequence of providing all those facilities to web scripts,
-    both versatile with SVG and powerful with the canvas element, is
-    the diminishing need for proprietary alternatives like Adobe Flash
-    or Microsoft Silverlight. A few year back, Adobe Flash was the de
-    facto standard for web animations. Today, with browsers adopting
-    HTML5 standard and especially the canvas element, animations can
-    both be fast and portable. Furthermore, the specification is fully
-    open, as are implementations in most browsers.
-      
-    Spacewar makes full use of the canvas element. All the game is
-    currently drawn on it, and it fills the entire web page. Some SVG
-    images are also used for the configuration menu.
+   Since all the work with asynchronous I/O is done in callbacks, this
+   directly translates into programming for events, a recurrent
+   pattern of web programming. For instance, an HTTP server will have
+   a function to handle a "request" event. Every request sent to the
+   server will wake up Node, trigger this function, and send Node to
+   sleep once the function has returned. It must be noted that since
+   no threading is involved, the callbacks execute sequentially rather
+   than concurrently. In particular, callbacks that are slow to return
+   will become a bottleneck for the server scalability. Nevertheless,
+   the event-driven approach is quite fit to the HTTP request/response
+   model, as well as other network applications.
 
-** Node.js
-   - Designed for efficient and easy concurrency for server apps
-   - Immature, but growing
-   - Tons of modules
-
-** Socket.IO
-   - Module of node
-   - Handles every technique in the book for establishing
-     bi-directional communication
+   Node also aims to be very modular: even core features are provided
+   as modules lazily loadable in a server program. The WebSocket
+   protocol is available in Node thanks to such modules. Spacewar uses
+   the one named Socket.IO [ref]. While other modules expose the bare
+   WebSocket protocol in Node, Socket.IO can fallback to other
+   protocols (like AJAX, HTTP long polling or HTTP streaming) if the
+   client has no support for WebSocket. This is highly convenient,
+   given the discrepancies between browsers as well as between
+   a browser's different versions.
      
 * Inner workings
 
@@ -380,7 +464,12 @@
   - [[http://tools.ietf.org/html/rfc6202][Known Issues and Best Practices for Long Polling]], April 2011
   - [[http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-07][The WebSocket protocol standards draft]], April 22, 2011
   - [[http://dev.w3.org/html5/websockets/][The WebSocket API]], May 21, 2011
+  - [[https://code.google.com/p/phpwebsocket/][phpwebsocket]], February 2010
 
+** Node
+   - http://nodejs.org/
+   - [[http://socket.io][Socket.IO]]
+   
 ** HTML5 drawing
   - [[http://webstuff.nfshost.com/anim-timing/Overview.html][Timing control for script-based animations]], February 22, 2011
   - [[http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#the-canvas-element][HTML Standard: the canvas element]], May 27, 2011
