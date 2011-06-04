@@ -412,6 +412,66 @@
 * Inner workings
 
 ** Overview
+   # Goal
+   # Game description
+
+   Spacewar is divided into a client and a server program. Both are
+   written in CoffeeScript, compiled to JavaScript before being
+   run. The client program is intended to be executed inside a web
+   browser supporting the HTML canvas element. The server must be run
+   by Node with additional modules installed.
+
+*** The decentralized prototype
+   Historically, the initial prototype of Spacewar was meant to work
+   without a server. The client handled all the game logic simulation,
+   in addition to drawing, and one could play the game even if a
+   server was not available. On the other hand, if a server was
+   running, then clients would send it their position and bullets, and
+   the server would broadcast them to all other connected clients. The
+   server thus acted as a mere relay.
+
+   This decentralized model had its merits: clients could play without
+   a server, nearly all computation was offloaded to clients, thus
+   greatly alleviating the server load, and the server was truly
+   scalable, able to handle many clients since its only role was to
+   coordinate packets between clients. But this approach was not
+   devoid of problems. The first one was the game state
+   synchronization across all clients. Since all clients ran their own
+   game logic and only sent updates concerning their own actions, the
+   game state was different for each one ; there was no authoritative
+   state as in a centralized model. This allowed asymmetric situations
+   to arise, where a ship would be dead for some clients but not for
+   others. Although this might have been solvable, by acknowledging
+   collisions between entities for affected clients for instance, the
+   far greater issue of cheating remained.
+
+   One thing to keep in mind with secure web development that also
+   applies to games, is to never trust the client. The client, when
+   given the chance, will always try to exploit any flaw to gain
+   advantage. In a game setting, this amounts to cheating, which ruins
+   the game experience of everyone else involved. This is not to say
+   that all clients should be regarded as evil exploiters, as most are
+   not, but care should be taken as to minimize, and even annihilate
+   the risks. If by any means someone is able to gain an unfair
+   advantage, then, given enough time, someone will. Manipulating the
+   game code is made even easier with JavaScript browser games ; no
+   decompilation is necessary as all the code is interpreted and
+   embedded in the web page. With this in mind, letting clients make
+   unilateral game decisions is ripe for exploits. In the Spacewar
+   prototype, clients could easily change the ship maximum speed, to
+   move faster than other players and gain advantage. The sole answer
+   is to check all data received from clients, and drop faulty
+   packets.
+
+   Again, cheating is avoidable, game state synchronization is doable,
+   but complexities and subtleties quickly arise when trying to solve
+   both problems. The centralized model of a game server handling all
+   game logic and broadcasting it to clients is far simpler to
+   design. The choice was thus made early to switch Spacewar to this
+   centralized model, at the cost of losing the ability for clients to
+   play without a server, and greatly diminishing the scalability, but
+   working as expected.
+
    - Server handles logic, communication
    - Client gathers input and draws
 
@@ -439,8 +499,6 @@
    - Out of view checks
    - Clipping, double buffering
 
-* History
-** Websocket/PHP prototype
 
 * Future improvements
  - Allow thousand game instances running on server cluster
