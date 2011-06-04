@@ -412,68 +412,132 @@
 * Inner workings
 
 ** Overview
-   # Goal
-   # Game description
 
-   Spacewar is divided into a client and a server program. Both are
-   written in CoffeeScript, compiled to JavaScript before being
-   run. The client program is intended to be executed inside a web
-   browser supporting the HTML canvas element. The server must be run
-   by Node with additional modules installed.
+*** The game rules and goal
+    As previously stated, the intent in building Spacewar was to
+    become more comfortable with standard and future web technologies,
+    by creating a simple, yet engaging multiplayer game. The core
+    gameplay revolves around shooting spaceships in space, with the
+    added twist of compensating for the surrounding planets' gravity
+    that draws spaceship fire.
+
+    Browsing to the game server's URL immediately jumps the client
+    into the game. Each player controls exactly one ship. The commands
+    are simple: ships can rotate left or right, thrust forward, fire a
+    bullet or use a bonus. Ships are brittle: one hit is all it takes
+    to destroy them. Obstacles are plenty: planets, bullets, other
+    ships, and lethal bonuses. The bright side is that dying bears no
+    in-game penalty aside from losing any held bonuses, as hitting the
+    spacebar immediately spawns a new ship. Hearing the opponent gloat
+    over his victory is punishing enough.
+
+    The action takes place on a rectangular map wrapped at the edges,
+    effectively simulating a torus. A plain rectangular map with
+    border walls is not symmetric: corners are notably disadvantageous
+    for players who wander in them, since it is much harder to escape
+    from them. The central area will thus see most of the action. A
+    torus is symmetric action-wise, as all area have the same
+    mobility. The toric map is harder to handle though, especially
+    when considering collisions at the map borders, or when drawing it
+    seamlessly in the client. The map is populated with immobile
+    planets, which have two roles in the game. First they act as
+    obstacles for players, as a ship colliding a planet will
+    immediately turn to sidereal dust. Players can not blindly go
+    forward, but must learn to maneuver skillfully between cluster of
+    planets in order to survive. Secondly, planets affect the
+    trajectory of bullets fired from the spaceships. Each planet has a
+    gravity parameter proportional to its radius, and bullets are
+    subject to every planet gravity field. Players have to learn how
+    bullets react to gravity, as it is crucial to improve their aim
+    but also to better dodge other ships' bullets.
+
+    # Image of the map rectangle with infinity maps around and view
+    # rectangles of some players.
+
+    The game has no explicit goal other than enjoyment. Adding some
+    kind of scoring system, based on the number of ships destroyed and
+    length of survival would be trivial, but whether this is
+    effectively beneficial to the game experience is still
+    undetermined. The core formula has proved to be satisfying enough
+    for the time being.
+
+    The bonuses add variety to the game, by introducing new obstacles
+    and weapons. New bonuses are regularly dropped onto the map,
+    staying at their location until a ship picks it up by flying over
+    it. Ships can only have one bonus at a time. Flying over a bonus
+    when already holding one will replace it. Once picked up, a bonus
+    can be used until it has no more charges. Most bonuses currently
+    implemented have only one charge. Bonuses are not definitive, and
+    need testing to determine if they have their place in the
+    game. The upside is that bonuses are easily added and removed from
+    a game for test purposes using parameters. Player feedback can be
+    used to increase or decrease the probability of a certain type of
+    bonus appearing. Ideally, these parameters could be altered even
+    during a game, matching the current players' interests. The most
+    successful bonus so far is the mine, immobile when placed on the
+    map, but which explodes when a ship or a bullet enter its
+    detection radius. These mines are a useful to set up traps against
+    tailing opponents, or in tight planet clusters.
 
 *** The decentralized prototype
-   Historically, the initial prototype of Spacewar was meant to work
-   without a server. The client handled all the game logic simulation,
-   in addition to drawing, and one could play the game even if a
-   server was not available. On the other hand, if a server was
-   running, then clients would send it their position and bullets, and
-   the server would broadcast them to all other connected clients. The
-   server thus acted as a mere relay.
+    Spacewar is divided into a client and a server program. Both are
+    written in CoffeeScript, compiled to JavaScript before being
+    run. The client program is intended to be executed inside a web
+    browser supporting the HTML canvas element. The server must be run
+    by Node with additional modules installed.
 
-   This decentralized model had its merits: clients could play without
-   a server, nearly all computation was offloaded to clients, thus
-   greatly alleviating the server load, and the server was truly
-   scalable, able to handle many clients since its only role was to
-   coordinate packets between clients. But this approach was not
-   devoid of problems. The first one was the game state
-   synchronization across all clients. Since all clients ran their own
-   game logic and only sent updates concerning their own actions, the
-   game state was different for each one ; there was no authoritative
-   state as in a centralized model. This allowed asymmetric situations
-   to arise, where a ship would be dead for some clients but not for
-   others. Although this might have been solvable, by acknowledging
-   collisions between entities for affected clients for instance, the
-   far greater issue of cheating remained.
+    Historically, the initial prototype of Spacewar was meant to work
+    without a server. The client handled all the game logic simulation,
+    in addition to drawing, and one could play the game even if a
+    server was not available. On the other hand, if a server was
+    running, then clients would send it their position and bullets, and
+    the server would broadcast them to all other connected clients. The
+    server thus acted as a mere relay.
 
-   One thing to keep in mind with secure web development that also
-   applies to games, is to never trust the client. The client, when
-   given the chance, will always try to exploit any flaw to gain
-   advantage. In a game setting, this amounts to cheating, which ruins
-   the game experience of everyone else involved. This is not to say
-   that all clients should be regarded as evil exploiters, as most are
-   not, but care should be taken as to minimize, and even annihilate
-   the risks. If by any means someone is able to gain an unfair
-   advantage, then, given enough time, someone will. Manipulating the
-   game code is made even easier with JavaScript browser games ; no
-   decompilation is necessary as all the code is interpreted and
-   embedded in the web page. With this in mind, letting clients make
-   unilateral game decisions is ripe for exploits. In the Spacewar
-   prototype, clients could easily change the ship maximum speed, to
-   move faster than other players and gain advantage. The sole answer
-   is to check all data received from clients, and drop faulty
-   packets.
+    This decentralized model had its merits: clients could play without
+    a server, nearly all computation was offloaded to clients, thus
+    greatly alleviating the server load, and the server was truly
+    scalable, able to handle many clients since its only role was to
+    coordinate packets between clients. But this approach was not
+    devoid of problems. The first one was the game state
+    synchronization across all clients. Since all clients ran their own
+    game logic and only sent updates concerning their own actions, the
+    game state was different for each one ; there was no authoritative
+    state as in a centralized model. This allowed asymmetric situations
+    to arise, where a ship would be dead for some clients but not for
+    others. Although this might have been solvable, by acknowledging
+    collisions between entities for affected clients for instance, the
+    far greater issue of cheating remained.
 
-   Again, cheating is avoidable, game state synchronization is doable,
-   but complexities and subtleties quickly arise when trying to solve
-   both problems. The centralized model of a game server handling all
-   game logic and broadcasting it to clients is far simpler to
-   design. The choice was thus made early to switch Spacewar to this
-   centralized model, at the cost of losing the ability for clients to
-   play without a server, and greatly diminishing the scalability, but
-   working as expected.
+    One thing to keep in mind with secure web development that also
+    applies to games, is to never trust the client. The client, when
+    given the chance, will always try to exploit any flaw to gain
+    advantage. In a game setting, this amounts to cheating, which ruins
+    the game experience of everyone else involved. This is not to say
+    that all clients should be regarded as evil exploiters, as most are
+    not, but care should be taken as to minimize, and even annihilate
+    the risks. If by any means someone is able to gain an unfair
+    advantage, then, given enough time, someone will. Manipulating the
+    game code is made even easier with JavaScript browser games ; no
+    decompilation is necessary as all the code is interpreted and
+    embedded in the web page. With this in mind, letting clients make
+    unilateral game decisions is ripe for exploits. In the Spacewar
+    prototype, clients could easily change the ship maximum speed, to
+    move faster than other players and gain advantage. The sole answer
+    is to check all data received from clients, and drop faulty
+    packets.
 
-   - Server handles logic, communication
-   - Client gathers input and draws
+    Again, cheating is avoidable, game state synchronization is doable,
+    but complexities and subtleties quickly arise when trying to solve
+    both problems. The centralized model of a game server handling all
+    game logic and broadcasting it to clients is far simpler to
+    design. The choice was thus made early to switch Spacewar to this
+    centralized model, at the cost of losing the ability for clients to
+    play without a server, and greatly diminishing the scalability, but
+    working as expected.
+
+    - Server handles logic, communication
+    - Client gathers input and draws
 
 ** Game logic
 
@@ -498,7 +562,7 @@
    - DrawInfinity infinite tricks
    - Out of view checks
    - Clipping, double buffering
-
+     
 
 * Future improvements
  - Allow thousand game instances running on server cluster
