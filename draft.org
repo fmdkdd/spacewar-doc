@@ -39,6 +39,8 @@
   laws of space. This is still a video game, and one bereft of any
   pretension other than unadulterated fun.
 
+  # Action shot
+
   The multiplayer aspect of the game was justified by at least two
   reasons. Firstly, playing a game with human opponents is more
   engaging than a solitary game, or than a game played against
@@ -58,7 +60,7 @@
   second. Therefore, a frantic multiplayer game with WebSockets would
   stand as a strong testimony of the protocol robustness.
 
-  [Transition]
+  # Transition
 
 * Other works
   - Lazeroids
@@ -70,7 +72,7 @@
 
 ** HTML5 standard
    
-   [Some introduction on W3C/WHATWG]
+   # Some introduction on W3C/WHATWG
 
 *** JavaScript
     JavaScript is the programming language of web browsers. Introduced
@@ -536,9 +538,189 @@
     play without a server, and greatly diminishing the scalability, but
     working as expected.
 
-    - Server handles logic, communication
-    - Client gathers input and draws
+** Client side
+   The client program has two roles:
+   - It gathers keyboard input from the player and forwards them to
+     the server.
+   - It receives updates from the server and renders the game to the
+     canvas.
+   In a way, the client can be thought of as a terminal with a fancy
+   interface.
 
+   First, it has to establish the connection to the server. This
+   amounts to creating the WebSocket, and waiting for the connected
+   event. When this event is received, it contains an id number used
+   to identify the client, which the client saves. Then, the client's
+   preferences (name and color of ship) are sent, if any, and a ship
+   is requested. Once notified of the ship creation, the game render
+   loop is started, and the client can play.
+
+   From then on, every time the client hits or releases a key, a
+   message is sent to the server. Knowing which keys each client has
+   pressed, the server updates each ship accordingly when going
+   through its own update loop. When any entity of the game world
+   changes, the client receives a message containing the new values to
+   synchronize its local state with the server state. The client is
+   only told what it needs to know in order to draw the game world
+   correctly. Information unneeded for drawing is never transmitted.
+   In parallel, the rendering loop displays the game world to the
+   player, centered around its ship.
+
+*** The rendering algorithm
+    Drawing the game is the main role of the client, and most
+    expensive in computer time. All drawing takes place on the HTML
+    canvas element, using the 2D rendering context. The canvas is
+    stretched to fill the client's whole window, adapting to eventual
+    resizing events, thus maximizing the player's view. To ensure
+    smooth rendering, the scene is requested to be drawn at 60 frames
+    per second. This is only a request: clients will do their best to
+    reach this frequency, but under-performing clients might not reach
+    it. In this case, the rendering will be choppy, and playing might
+    become difficult, or even unsatisfactory. Efforts should thus be
+    made to ensure most computers can draw the game fast enough to
+    allow a smooth play. Optimization comes after correctness however,
+    and since Spacewar is not feature complete at this stage, some
+    parts can lead to slowdowns on even recent hardware.
+
+    The rendering loop algorithm is very similar to the following
+    code:
+
+    #+BEGIN_SRC coffee
+      redraw = (context) ->
+         context.clearCanvas()
+      
+         # Center view around the player's ship.
+         centerView()
+      
+         # Draw all objects.
+         for obj in gameObjects
+            obj.draw(context) if obj.inView()
+      
+         # Draw all visual effects.
+         for e in effects
+            e.draw(context) if e.inView()
+      
+         # Draw outside of the map bounds.
+         drawInfinity(context)
+      
+         # Draw user interface.
+         drawUI(context)
+    #+END_SRC
+
+    # Schema of drawing process
+
+    We start by clearing the whole canvas, which contained the
+    previous frame. This is needed since the scene is centered around
+    the player, thus every object in view has to be redrawn every time
+    the player moves. On this blank canvas, the game is drawn in
+    layers. Each layer is drawn atop of the previous one, and any
+    drawing done in a layer obscures the drawings done at the same
+    place in lower layers. The first layer contains every game object
+    (ships, bullets, planets, bonuses). The second layer is filled
+    with cosmetic effects that are tied to a particular object and
+    exist only on the client. Ship explosions are the only effect
+    present so far. The final layer is used for the user interface:
+    radar symbols drawn at the window's edges to indicate other
+    players and incoming bonuses that are out of view. The
+    drawInfinity method warrants a deeper explanation.
+
+*** Drawing infinity ... and beyond
+    The purpose of the drawInfinity method is to render the toric map
+    to the player by redrawing each visible object outside of the map
+    edges. Without drawInfinity, a player near an edge of the map
+    would not see the objects beyond the edge until he crosses it and
+    is wrapped around on the torus. This method helps to create a
+    seamless transition when wrapping around the edges. To illustrate,
+    look at the following screenshot taken from the game.
+    
+    # Two-part schema could be helpful here
+
+    On figure X, the game screen is shown without calling drawInfinity
+    (Xa), then with drawInfinity (Xb). In Xa, the visible part of the
+    game map is first drawn at the left of the canvas, leaving a blank
+    area to the right, where the map ends. Since the map is a torus,
+    there can not be any undrawn part on the canvas. Here the right
+    part of the canvas should show the leftmost area of the game
+    map. That is precisely what the drawInfinity method does: it
+    redraws the map at the edges of the original map by translating
+    it. The method collects the edges currently visible by the player
+    and draws the map for each one.
+
+    While this drawing method ensures the world is correctly rendered
+    as a torus, there are additional details to take care off. First,
+    all objects should behave accordingly to the toric condition of
+    the map. That is the server's role when updating the game
+    world. For instance, bullets should wrap around and be affected by
+    the gravity of all surrounding planets, even planets that are
+    beyond the map edges. Another example is given by the planets:
+    they should not overflow the map when created, otherwise they
+    would be rendered as overlapping another planet from the other
+    side of the map, which is not allowed. Last but not least, the
+    radar that is used to show other players' ships and incoming
+    bonuses that are out of view must select the nearest target among
+    all the "ghosts" of an object, those mirror images drawn by the
+    drawInfinity method. When the player's ship is near the left
+    border of the map, and another ship is near the right border, the
+    radar should indicate the shortest route to the target, which is
+    realized by going left and wrapping around the edges, rather than
+    traversing the whole map by going to the right.
+
+    # Two-part schema of radar indicating real target, then
+    # nearest ghost
+
+*** Rendering performance
+    Drawing to the canvas at 60 frame per second, even in 2D, can tax
+    even recent hardware. Speeding up this step is beneficial to
+    gameplay, as smooth rendering is essential to fast paced
+    action-oriented games. While we prefer to avoid premature
+    optimization, some has already occurred and bore great benefits.
+
+    The first optimization is avoiding to draw objects that are out of
+    view. Each object is drawn only if it can be seen by the player,
+    within the bounds of its screen (there is no line of sight
+    restriction). This saves CPU cycles, as even if a pixel would not
+    be rendered to the screen, browsers still take time doing
+    operations on it. That is because the canvas element can be drawn
+    upon even if it is not attached to the DOM tree, saved for later
+    purposes. Since the map can be vastly larger than the player's
+    view, and full of objects rather costly to draw, this check is
+    judicious.
+
+    # Schema of player's view and not drawn objects
+
+    The second optimization is avoiding to redo costly operations that
+    can be saved. Planets are immobile objects that never change their
+    shape or color during the game. They are also numerous on the map,
+    thus rather costly to draw, even though they are represented by
+    bare discs. By drawing each of them only once to a devoted canvas,
+    we can later draw this hidden canvas onto the real canvas
+    presented to the player at a lower computational cost. Drawing to
+    a hidden surface beforehand and applying this surface to the game
+    canvas like a stamp is a cornerstone technique of 2D game
+    programming called "spriting".
+
+    # Two-part schema of sprite, then stamped canvas
+
+    These optimizations already proved their worth by stabilizing the
+    framerate, but it must be noted that the low-level tweaking common
+    in video game programming is restricted in this setting. The
+    programmer has only access to the canvas, and the browser is in
+    charge of the lower-level operations and interaction with the
+    graphic capabilities of the client's machine. While tuning for
+    specific browsers is feasible, tailoring the game to the features
+    offered by a particular CPU or GPU is beyond reach. This is the
+    cost of using a scripting language running inside a
+    browser. Luckily, implementers of the canvas element are committed
+    to minimize this cost. For instance, both Gecko (used by Firefox)
+    and WebKit (used by Chrome and Safari) engines provide double
+    buffering to the canvas: drawing operations are done off-screen
+    and the resulting canvas is shown only when the script is
+    sleeping, after the frame is done drawing. This is quicker than
+    directly drawing to the screen's framebuffer.
+
+** Server side
+   - Server handles logic, communication
+     
 ** Game logic
 
 *** Update loop
@@ -557,12 +739,6 @@
 *** Handling connections
 *** Handling messages
 *** Handling disconnections
-
-** Drawing
-   - DrawInfinity infinite tricks
-   - Out of view checks
-   - Clipping, double buffering
-     
 
 * Future improvements
  - Allow thousand game instances running on server cluster
