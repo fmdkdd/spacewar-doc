@@ -415,7 +415,7 @@
 
 ** Overview
 
-*** The game rules and goal
+*** The game's rules and goal
     As previously stated, the intent in building Spacewar was to
     become more comfortable with standard and future web technologies,
     by creating a simple, yet engaging multiplayer game. The core
@@ -449,9 +449,10 @@
     planets in order to survive. Secondly, planets affect the
     trajectory of bullets fired from the spaceships. Each planet has a
     gravity parameter proportional to its radius, and bullets are
-    subject to every planet gravity field. Players have to learn how
-    bullets react to gravity, as it is crucial to improve their aim
-    but also to better dodge other ships' bullets.
+    subject to every planet gravity field. Larger planets pull harder
+    on bullets, eventually crashing them on their surface. Players
+    have to learn how bullets react to gravity, as it is crucial to
+    improve their aim but also to better dodge other ships' bullets.
 
     # Image of the map rectangle with infinity maps around and view
     # rectangles of some players.
@@ -716,29 +717,183 @@
     buffering to the canvas: drawing operations are done off-screen
     and the resulting canvas is shown only when the script is
     sleeping, after the frame is done drawing. This is quicker than
-    directly drawing to the screen's framebuffer.
+    directly drawing to the screen framebuffer.
 
 ** Server side
-   - Server handles logic, communication
-     
-** Game logic
+   The server program is where the game actually resides, where game
+   logic, collision detection and resolution, and synchronization
+   between clients arises. As previously stated, the server is written
+   in JavaScript (compiled from CoffeeScript) and run in a Node
+   environment.
 
-*** Update loop
-    - Move
-    - Check collisions
-    - Update
+   Before launching the actual game server, some preparations are in
+   order. First, a HTTP server is started to serve the client
+   files. The second step is to bind the WebSocket to the HTTP server,
+   listening for a HTTP upgrade request initiated by the client
+   program. Finally we setup the callbacks for the client connexion,
+   disconnection and message events, initialize the game map and then
+   launch the game loop.
 
-*** Collisions
-    - Spatial hashing
-    - Symmetrical treatment
+*** Client-server communication
+    When a client connects to the server, a player id number is
+    established, an associated player object is created server-side,
+    then the client is notified of the connexion. Following that, the
+    client should request a ship, in which case the server will create
+    the ship and send a full game update to the client containing all
+    game objects. Once this is done, the client can play.
 
-** Client-server communication
-   - Keeping objects in sync
-   - Minimizing communication overhead
+    During the main course of the game, the only messages received by
+    the server from clients are input related. Pressed and released
+    keys are sent to the server, who updates the corresponding player
+    object.
 
-*** Handling connections
-*** Handling messages
-*** Handling disconnections
+    In the event of a client disconnection, be it voluntary or
+    accidental, other clients are notified and resources are freed.
+
+*** Setting up the game map
+    To initialize the map, its dimensions are first retrieved from the
+    preferences file. This file contains constant values used
+    throughout the game simulation which can be customized to tune the
+    game mechanics. For example, the preferences file describes the
+    maximum allowed ship speed, the intensity of the gravity effect on
+    bullets, and the activation time of mines.
+
+    Once the map size is known, we must populate it with planets. The
+    number of planets to place and their radius range is also loaded
+    from the preferences file. Then each planet is randomly put on the
+    map, provided that it does not overlap any previously put
+    planet. There is a chance for each planet to have an accompanying
+    satellite. When this happens, the total radius of the system is
+    taken into account when checking against overlaps. Satellite
+    size, rotational speed and distance to host planet are all
+    parameters in the aforementioned file.
+
+*** The update loop
+    The most run code on the server is the one called by the update
+    loop. Similarly to the client drawing loop, the server update loop
+    is run at a high frequency: every 20 milliseconds, which
+    translates to 50 updates per second. The client and server update
+    loops do not have to be synchronized, since there will always be
+    an added network latency between them. The server should update
+    very often though, to be able to quickly respond to user input.
+
+    Let's have a look at the (abridged) update loop:
+
+    #+BEGIN_SRC coffee
+      update: () ->
+         # Process input from players.
+         for id, player of @players
+            player.update()
+      
+         # Move all objects and update their grid position.
+         for id, obj of @gameObjects
+            obj.move()
+            if obj.tangible()
+               @placeObjectInGrid(obj)
+      
+         # Check and handle all collisions between objects.
+         @handleCollisions()
+      
+         # Let objects update and record their changes.
+         allChanges = {}
+         for id, obj of @gameObjects
+            obj.update()
+            allChanges[id] = obj.changes()
+      
+         # Send only the changes to all clients.
+         @socket.broadcast
+            type: 'objects update'
+            objects: allChanges
+    #+END_SRC
+
+    The first step is to process the input of each player. Spacewar requires
+    only five keys:
+    - Up arrow to thrust forward,
+    - Left and right arrow to rotate,
+    - Spacebar (or A) to fire,
+    - Z to use the carried bonus.
+    The client sends its keys to the server which saves them for this
+    update purpose. When processing each player's input, the server
+    only has to check whether a key is pressed to update the player's
+    ship accordingly. For example, if the left arrow key is pressed at
+    the time the server enters the update loop, the ship's facing
+    angle will be decreased [fn:: The origin of the HTML canvas
+    element is at the upper left corner, with x increasing to the
+    right and y increasing to the bottom. Consequently, angles of the
+    unit circle increase clockwise instead of conventionally
+    increasing counterclockwise.].
+
+    The next step is to update all objects. This is divided into three
+    parts: first objects are moved, then all collisions between
+    objects are checked and handled, and finally objects have their
+    state updated. With this division, objects can post-process
+    collisions in their update method instead of requiring a separate
+    method with duplicated code. Moving all objects is simple: the
+    position is updated with respect to the object's velocity. The
+    only subtlety is to wrap around the map edges. Some objects like
+    planets and bonuses do not ever move. Bullets are of interest
+    since they are affected by gravity from planets: a Newtonian
+    gravity formula is applied to the bullet acceleration vector for
+    every planet around.
+
+    Once positions are updated, objects are placed in a grid used to
+    check collisions. We will cover collisions in further details in
+    [ref]. After collisions are processed, the state of each game
+    object is updated. In this step, objects can update anything not
+    related to position, which is handled in the position update. For
+    example, mines grow their detection radius and satellites increase
+    their rotation angle.
+
+    Most objects will have their state changed as a result of these
+    steps. Moving changes the position vector, mines change their hit
+    radius at each update, ships and bullets can die after hitting
+    another object, etc. Clients should be notified of all these
+    changes, but there is no need to transmit fields that have not
+    been modified. Full game objects are already sent to the client at
+    connexion time. Further updates only transmit the changes to avoid
+    wasting bandwidth and unnecessary serialization. For this purpose,
+    all game objects have the possibility to mark fields to be watched
+    for changes. Changes to these marked fields are recorded into a
+    dedicated object that is gathered in the update loop by calling
+    /obj.changes()/. When changes from all objects are obtained this
+    way, clients are notified of the game update by broadcasting.
+
+*** Handling collisions
+    Treating collisions between game objects is straightforward,
+    except for a few subtle details. The basic principle is to check
+    every couple of objects for collisions and handle side effects
+    with respect to object type. In Spacewar, all ships would check if
+    a collision occurred with any other ship, bullet, planet, bonus,
+    etc. Obviously a collision is symmetrical, meaning we only have to
+    check half of the couples. Once a collision is detected side
+    effects are applied. If a collision occurred between a ship and a
+    bullet for example, the ship would explode and the bullet would
+    enter its 'dead' state. Both would not be able to collide with
+    another object anymore. On the other hand, if a ship collided with
+    a planet, the ship would still explode but the planet would be
+    unaffected. Processing side effects from a collision at the same
+    time for both colliding objects is clearer, since all effects from
+    the collision are in one place. It is also easier than having
+    objects handle the collision themselves, where issues related to
+    the absence of atomicity arise.
+
+    Accurately checking for collisions between two objects often
+    requires solving equations, which can be quite costly depending on
+    the shapes involved. Accuracy can then be traded for speed by
+    using approximated equations. A uncompromising speedup can be
+    obtained by only checking collisions between nearby objects. To
+    group objects by proximity, any form of spatial hashing can be
+    used. Spacewar elected the spatial grid approach, as it is
+    straightforward and fit to the 2D rectangular map. The map is
+    divided into same-sized regions at its creation. During the update
+    loop, when objects are moved, they are inserted in all regions
+    they overlap with. Collisions are then only checked between
+    objects belonging to the same region. Due to the toric nature of
+    the map, the spatial grid has to be toric too. Objects near the
+    map edges can lie in grid regions adjacent only by wrapping
+    around. Collision checks thus have to work on parts rather than
+    whole objects. Other optimizations rely on ensuring game objects
+    are tangible before diving into costly computations.
 
 * Future improvements
  - Allow thousand game instances running on server cluster
