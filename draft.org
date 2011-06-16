@@ -63,16 +63,58 @@
   # Transition
 
 * Other works
-  - Lazeroids
-  - Rawkets
-  - Swarmnation
-  - Lichess
+  Spacewar arose from the want to see some dog-fighting space action
+  in web browsers leveraging modern technologies. Outside of the gravity
+  gimmick inspired by the open source game Slingshot [ref, who],
+  there was no direct influence by other works until we took a peek at
+  what was available.
+
+  Strangely enough, the space setting seems to be popular, as at least
+  two games built with JavaScript and Node bear the same premises. The
+  first one is Lazeroids [ref, who]. The server was initially
+  conceived using Ruby on Rails [ref] over a week-end competition, and
+  later converted to Node. The gameplay is a voluntary homage to the
+  classic 1979 arcade game Asteroids where a lone spaceship fires
+  round-shaped bullets at dangerously concave asteroids drifting in
+  the otherwise empty space. Lazeroids allow multiple players to play
+  in the same world and feature a score board. Attacking other players
+  did not seem to work right when we tried it, and the gameplay also
+  feels dated, with reason. Still, one must keep in mind that
+  Lazeroids was conceived as a demonstration of Ruby on Rails and
+  HTML5 capabilities over a 48-hours period.
+
+  The second space-inspired browser game is Rawkets [ref, who]. Here
+  the focus is on player versus player combat, as there are no other
+  interactions with the world. The fighting stage is delimited by a
+  thick rectangular wall, and the combat is very basic. Ships fire
+  bullets that go straight ahead dealing damage to the first target
+  hit. Ships can sustain some damage before exploding, and recover
+  damage over time. The graphics are elementary, except for the
+  somewhat fancy static background and interface. There are even sound
+  effects and a background music [fn:: Rawkets uses Adobe Flash for
+  sound. Although the HTML5 standard introduces an audio API, browser
+  implementations might have been lacking when Rawkets was
+  conceived.]. Like Lazeroids, Rawkets primary purpose is to
+  demonstrate the capabilities of HTML5 and Node in the fun setting of
+  a multiplayer space fighting game.
 
 * The technology behind Spacewar
 
 ** HTML5 standard
-   
-   # Some introduction on W3C/WHATWG
+   The Web Hypertext Application Technology Working Group (WHATWG) has
+   been spearheading web technology innovation since 2004, branching
+   off the World Wide Web Consortium (W3C) to draft the HTML5
+   specification, when the W3C was solely focused on XHTML 2.0. In
+   2009, the W3C abandoned XHTML 2.0 and reunited with the WHATWG to
+   formalize HTML5. While the specification has yet to be finished at
+   the time of this writing, some parts are stable and already
+   implemented in most web browsers. The canvas element Spacewar uses
+   for drawing is such a part, but the WebSocket protocol is still
+   evolving. It is decidedly rewarding to work with such fresh
+   technologies and to follow the changes they are going through, as
+   the lack of documentation means we have to look up at the
+   specification itself for information, and at browser
+   implementations as well for details.
 
 *** JavaScript
     JavaScript is the programming language of web browsers. Introduced
