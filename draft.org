@@ -896,11 +896,78 @@
     are tangible before diving into costly computations.
 
 * Future improvements
- - Allow thousand game instances running on server cluster
- - Optimize client drawing
- - Optimize server update
- - Enhance compatibility with older browsers
- - Compatibility with touch devices
+  In the current state, Spacewar is playable, enjoyable and rather
+  stable. However, there is still room for improvement. On the short
+  term, we would like to allow clients to launch games and invite
+  friends in it. The envisioned scheme is the following: after landing
+  on the Spacewar homepage, the client would be greeted with two
+  choices of playing straight away, and creating a new game. Playing
+  straight away would jump the client into a randomly determined
+  active game. The client could also express wishes on its playing
+  preferences, like specifying the maximum number of player in the
+  game, the density of planets, the map dimensions and so on. These
+  wishes would narrow the search for an active game to join.
+  Alternatively, were the client to choose to create a new game, he
+  would be prompted for more in-depth settings, similar to those
+  currently present in the preferences file. He would be able to set
+  the maximum number of players allowed in the game, the map
+  dimensions, the density of planets and satellites, but also the
+  allowed bonuses and bonuses timing. Eventually, he should be able to
+  tweak the game settings so much that the created game would have a
+  unique quality to it. Once he is satisfied with these settings, the
+  client can start the game. An active game would have a unique URL
+  attached to it. The client who created the game should forward this
+  URL to all the players he wants to spar with. Upon accessing this
+  URL, those players would immediately join the action.
+
+  On the technical side, this scheme of having multiple games running
+  concurrently would be interesting to implement. This might need some
+  more thought, but at this time we envision to have a delegated HTTP
+  server program running in front of the multiple Spacewar games,
+  forwarding the messages from clients to dedicated game processes,
+  depending on the access URL. This program would thus act similarly
+  to a reverse proxy.
+
+  In order to allow at least a dozen of those games concurrently
+  running on the same machine, each game hosting from a handful to
+  potentially ten or twenty players, the server program needs to only
+  consume a fraction of the machine's resources. Otherwise the
+  hardware costs to support even a hundred concurrent players will
+  quickly rise to the unaffordable level. Consequently, optimization
+  in the server is another short term goal. This optimization should
+  focus on scaling resource usage with the number of game objects. It
+  goes without saying that optimizing client drawing is another
+  priority. The game is currently rather demanding, even though the
+  graphics are bare. This is due in part to the immaturity of
+  implementations of the canvas rendering context in current web
+  browsers. Nonetheless, there are certainly ways to fasten the
+  rendering loop without waiting for optimizations on browsers to
+  happen.
+
+  Other priorities, on a longer term, are the compatibility and
+  stability of both client and server programs. For example, every
+  browser handle input a different way: we need to account for this
+  fact. The goal is to provide a similar experience on all supported
+  browsers. Particularities in each browser makes this a challenging
+  task. For instance, Firefox does anti-aliasing on the canvas
+  element, while Chrome does not. This translates into the
+  impossibility to specify sub-pixel coordinates to draw at when using
+  Chrome. Since anti-aliasing is not part of the canvas element
+  specification and let to implementers, we have to accommodate these
+  peculiarities.
+
+  More gameplay-oriented features are planned as well: more bonuses,
+  single-player action, and some way of tracking progress in
+  multiplayer matches. We might also consider making the client
+  compatible with touch devices, both to widen the audience and to
+  learn how to interact with those devices in a web setting.
+
+  Be it a new language, an experimental library, a novel algorithm,
+  learning has always been the strongest motivation to take on this
+  project. We picked up quite a few skills along the road, and will
+  continue to do so until we run out of ideas to improve Spacewar.
+  Then we will acknowledge of the game maturity, rest a while, and
+  move on to another project, ready to learn anew.
 
 * Acknowledgments
   - Adrien, David, Thibaut for the spark
