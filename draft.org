@@ -1,4 +1,12 @@
 # Draft of articles documenting Spacewar.
+# -*- mode: org; org-export-latex-default-packages-alist: nil -*-
+#+Title: Building a multiplayer space action game in HTML5
+#+Author: Florent Marchand de Kerchove
+#+Email: fmdkdd@gmail.com
+#+Language: en
+#+LATEX_CMD: xelatex
+#+LATEX_CLASS_OPTIONS: [a4paper, 12pt]
+#+LATEX_HEADER: \setmainfont[Mapping=tex-text]{Minion Pro}
 
 * Rationale
   Creating a full-fledged video game is an entertaining way to learn
@@ -39,7 +47,10 @@
   laws of space. This is still a video game, and one bereft of any
   pretension other than unadulterated fun.
 
-  # Action shot
+  #+CAPTION: Spacewar action shot. Two spaceships battle it out among
+  #+CAPTION: planets and mines.
+  #+ATTR_LaTeX: width=.9\textwidth
+  [[./img/action-shot.png]]
 
   The multiplayer aspect of the game was justified by at least two
   reasons. Firstly, playing a game with human opponents is more
@@ -59,8 +70,6 @@
   server: more than fifty updates are broadcasted to clients every
   second. Therefore, a frantic multiplayer game with WebSockets would
   stand as a strong testimony of the protocol robustness.
-
-  # Transition
 
 * Other works
   Spacewar arose from the want to see some dog-fighting space action
@@ -125,7 +134,7 @@
     associate JavaScript with cascading pop-ups windows and obnoxious
     animations. The language gained recognition in recent years, with
     the advent of Ajax techniques and the maturity of JavaScript
-    frameworks and libraries such as jQuery, CommonJS, or [?]. Most
+    frameworks and libraries such as jQuery, CommonJS, or Dojo. Most
     websites today use JavaScript in a variety of ways: to add visual
     effects to their design (essentially animations for a more dynamic
     web), to enhance the site accessibility (visual and oral clues to
@@ -339,9 +348,9 @@
     #+BEGIN_QUOTE
     - a Web "origin"-based security model for browsers;
     - an addressing and protocol naming mechanism to support multiple
-    services on one port and multiple host names on one IP address;
+      services on one port and multiple host names on one IP address;
     - a framing mechanism on top of TCP to get back to the IP
-    packet mechanism that TCP is built on, but without length limits.
+      packet mechanism that TCP is built on, but without length limits.
     #+END_QUOTE
 
     The WebSocket protocol enforces the same origin policy commonly
@@ -358,8 +367,6 @@
     received, connection closed. The WebSocket object can be used to
     send messages to the server, and to close the connection. Messages
     can either be sent as UTF-8 strings or as raw binary.
-
-    [closure?]
 
 ** Node
    Obviously, WebSocket support is required both on the client and on
@@ -495,9 +502,6 @@
     on bullets, eventually crashing them on their surface. Players
     have to learn how bullets react to gravity, as it is crucial to
     improve their aim but also to better dodge other ships' bullets.
-
-    # Image of the map rectangle with infinity maps around and view
-    # rectangles of some players.
 
     The game has no explicit goal other than enjoyment. Adding some
     kind of scoring system, based on the number of ships destroyed and
@@ -650,7 +654,7 @@
          drawUI(context)
     #+END_SRC
 
-    # Schema of drawing process
+    #+ Schema of drawing process
 
     We start by clearing the whole canvas, which contained the
     previous frame. This is needed since the scene is centered around
@@ -676,7 +680,10 @@
     seamless transition when wrapping around the edges. To illustrate,
     look at the following screenshot taken from the game.
     
-    # Two-part schema could be helpful here
+    #+CAPTION: Drawing the game world with (left) and without (right)
+    #+CAPTION: drawInfinity.
+    #+ATTR_LaTeX: width=\textwidth
+    [[./img/infinity.png]]
 
     On figure X, the game screen is shown without calling drawInfinity
     (Xa), then with drawInfinity (Xb). In Xa, the visible part of the
@@ -708,8 +715,8 @@
     realized by going left and wrapping around the edges, rather than
     traversing the whole map by going to the right.
 
-    # Two-part schema of radar indicating real target, then
-    # nearest ghost
+    #+ Two-part schema of radar indicating real target, then
+    #+ nearest ghost
 
 *** Rendering performance
     Drawing to the canvas at 60 frame per second, even in 2D, can tax
@@ -729,7 +736,11 @@
     view, and full of objects rather costly to draw, this check is
     judicious.
 
-    # Schema of player's view and not drawn objects
+    #+CAPTION: Objects that are out of the player's view are
+    #+CAPTION: not drawn to save time. Here the player's view is drawn in pink
+    #+CAPTION: and culled objects are in light gray.
+    #+ATTR_LaTeX: width=.7\textwidth
+    [[./img/view-culling.png]]
 
     The second optimization is avoiding to redo costly operations that
     can be saved. Planets are immobile objects that never change their
@@ -742,7 +753,11 @@
     canvas like a stamp is a cornerstone technique of 2D game
     programming called "spriting".
 
-    # Two-part schema of sprite, then stamped canvas
+    #+CAPTION: Pre-rendered drawing of a planet saved as a sprite
+    #+CAPTION: image to be stamped on the canvas to save time in the
+    #+CAPTION: rendering loop.
+    #+ATTR_LaTeX: width=2cm
+    [[./img/sprite.png]]
 
     These optimizations already proved their worth by stabilizing the
     framerate, but it must be noted that the low-level tweaking common
