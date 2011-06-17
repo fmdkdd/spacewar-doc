@@ -1,12 +1,35 @@
 # Draft of articles documenting Spacewar.
-# -*- mode: org; org-export-latex-default-packages-alist: nil -*-
 #+Title: Building a multiplayer space action game in HTML5
 #+Author: Florent Marchand de Kerchove
 #+Email: fmdkdd@gmail.com
 #+Language: en
-#+LATEX_CMD: xelatex
+
+# Export to latex 
+#+LATEX_CMD: pdflatex
+#+LATEX_CLASS: article
 #+LATEX_CLASS_OPTIONS: [a4paper, 12pt]
-#+LATEX_HEADER: \setmainfont[Mapping=tex-text]{Minion Pro}
+
+# Font selection
+#-LATEX_HEADER: \setmainfont[Mapping=tex-text]{Minion Pro}
+#+LATEX_HEADER: \usepackage{libertine}
+
+# Code listings styling
+#+LATEX_HEADER: \usepackage{xcolor}
+#+LATEX_HEADER: \definecolor{racoon}{hsb}{0.1, 0.3, 0.5}
+
+#+LATEX_HEADER: \lstset{tabsize=3, breaklines=false, columns=fullflexible}
+#+LATEX_HEADER: \lstset{frame=leftline, framerule=2pt, rulecolor=\color{racoon}}
+
+#+LATEX_HEADER: \lstnewenvironment{javascript}
+#+LATEX_HEADER: {\lstset{ language={C}, keywords={var, function} }}{}
+
+#+LATEX_HEADER: \lstnewenvironment{coffeescript}
+#+LATEX_HEADER: {\lstset{ language={Ruby} }}{}
+#+BIND: org-export-latex-custom-lang-environments ((espresso "javascript") (coffee "coffeescript"))
+
+# Bibliography setup
+#+LATEX_HEADER: \usepackage{biblatex}
+#+LATEX_HEADER: \addbibresource{draft.bib}
 
 * Rationale
   Creating a full-fledged video game is an entertaining way to learn
@@ -74,25 +97,25 @@
 * Other works
   Spacewar arose from the want to see some dog-fighting space action
   in web browsers leveraging modern technologies. Outside of the gravity
-  gimmick inspired by the open source game Slingshot [ref, who],
+  gimmick inspired by the open source game Slingshot \cite{slingshot},
   there was no direct influence by other works until we took a peek at
   what was available.
 
   Strangely enough, the space setting seems to be popular, as at least
   two games built with JavaScript and Node bear the same premises. The
-  first one is Lazeroids [ref, who]. The server was initially
-  conceived using Ruby on Rails [ref] over a week-end competition, and
-  later converted to Node. The gameplay is a voluntary homage to the
-  classic 1979 arcade game Asteroids where a lone spaceship fires
-  round-shaped bullets at dangerously concave asteroids drifting in
-  the otherwise empty space. Lazeroids allow multiple players to play
-  in the same world and feature a score board. Attacking other players
-  did not seem to work right when we tried it, and the gameplay also
-  feels dated, with reason. Still, one must keep in mind that
-  Lazeroids was conceived as a demonstration of Ruby on Rails and
-  HTML5 capabilities over a 48-hours period.
+  first one is Lazeroids \cite{lazeroids}. The server was initially
+  conceived using Ruby on Rails over a week-end competition, and later
+  converted to Node. The gameplay is a voluntary homage to the classic
+  1979 arcade game Asteroids where a lone spaceship fires round-shaped
+  bullets at dangerously concave asteroids drifting in the otherwise
+  empty space. Lazeroids allow multiple players to play in the same
+  world and feature a score board. Attacking other players did not
+  seem to work right when we tried it, and the gameplay also feels
+  dated, with reason. Still, one must keep in mind that Lazeroids was
+  conceived as a demonstration of Ruby on Rails and HTML5 capabilities
+  over a 48-hours period.
 
-  The second space-inspired browser game is Rawkets [ref, who]. Here
+  The second space-inspired browser game is Rawkets \cite{rawkets}. Here
   the focus is on player versus player combat, as there are no other
   interactions with the world. The fighting stage is delimited by a
   thick rectangular wall, and the combat is very basic. Ships fire
@@ -174,8 +197,7 @@
          bar = 2;
          // do something with foo and bar
       }
-      f();
-      // foo is 1, bar is 2
+      f(); // foo is 1, bar is 2
     #+END_SRC
 
     In this code snippet, foo is a global declared in the global
@@ -197,17 +219,17 @@
     
     In light of these peculiarities, seasoned JavaScript programmers
     established a guideline of recommended JavaScript style which
-    emphasize clear and safe JavaScript programming practices [ref JS
-    Garden, Elements of Style]. Popular frameworks also tend to
-    enforce these practices and have their users follow them in order
-    to avoid errors that are hard to track. Another solution to
-    alleviate these downsides is to use another syntax that compiles
-    directly into JavaScript, bypassing the error-prone features.
+    emphasize clear and safe JavaScript programming practices
+    \cite{js-garden}. Popular frameworks also tend to enforce these
+    practices and have their users follow them in order to avoid
+    errors that are hard to track. Another solution to alleviate these
+    downsides is to use another syntax that compiles directly into
+    JavaScript, bypassing the error-prone features.
 
-    CoffeeScript is a language by Jeremy Ashkenas [ref] that does just
-    that. It compiles directly into JavaScript without any overhead at
-    run-time. CoffeeScript borrows its syntax from Ruby [ref], another
-    popular programming language in the web development
+    CoffeeScript is a language by Jeremy Ashkenas \cite{coffee} that
+    does just that. It compiles directly into JavaScript without any
+    overhead at run-time. CoffeeScript borrows its syntax from Ruby,
+    another popular programming language in the web development
     community. This translates into a cleaner syntax with optional
     parentheses, where indentation delimit blocks and functions
     instead of accolades. In addition, CoffeeScript provides syntactic
@@ -222,11 +244,11 @@
     reasons.
 
 *** Canvas
-    The canvas HTML element is an important part of HTML5. It was
-    initially created by Apple for Safari and the Mac OS X Dashboard,
-    but is now implemented in all the major web browsers [fn:: By
-    major web browsers, we mean Firefox, Chrome, Internet Explorer,
-    Safari and Opera.]
+    The canvas HTML element \cite{canvas} is an important part of
+    HTML5. It was initially created by Apple for Safari and the Mac OS
+    X Dashboard, but is now implemented in all the major web browsers
+    [fn:: By major web browsers, we mean Firefox, Chrome, Internet
+    Explorer, Safari and Opera.].
 
     The intent is to provide an area on web pages upon which to draw
     freely, as an alternative to vector graphics provided by SVG
@@ -249,19 +271,19 @@
     any size.
 
     The canvas element also has the ability to use a 3d rendering
-    context, enabling OpenGL applications to be embedded in web pages
-    and rendered using a software OpenGL implementation, or even a
-    hardware one if the proper driver is present. Implementations of
-    this 3d context in major browsers is ongoing. The latest Firefox,
-    Chrome, Safari and Opera browsers support WebGL, but not on all
-    platforms. Besides, since calling the GPU driver directly can lead
-    to crashes unrelated with the browser itself (caused by faulty
-    drivers or poor graphics management in the OS), WebGL support can
-    be deactivated by default in some browsers, or for unsupported
-    hardware. Nonetheless, some demonstrative applications already
-    exist, with the most impressive being ports of famous 3d games
-    like this Quake 3 level loader [ref] or this interactive film by
-    Chris Milk [ref].
+    context called WebGL \cite{webgl}, enabling OpenGL applications to
+    be embedded in web pages and rendered using a software OpenGL
+    implementation, or even a hardware one if the proper driver is
+    present. Implementations of this 3d context in major browsers is
+    ongoing. The latest Firefox, Chrome, Safari and Opera browsers
+    support WebGL, but not on all platforms. Besides, since calling
+    the GPU driver directly can lead to crashes unrelated with the
+    browser itself (caused by faulty drivers or poor graphics
+    management in the OS), WebGL support can be deactivated by default
+    in some browsers, or for unsupported hardware. Nonetheless, some
+    demonstrative applications already exist, with the most impressive
+    being ports of famous 3d games like this Quake 3 level loader
+    \cite{q3demo} or this interactive film by Chris Milk \cite{rome}.
     
     Finally, should web applications using canvas require even more
     processing power for their animations, major browsers are
@@ -316,34 +338,34 @@
 
     To alleviate these problems, more refined techniques have come to
     light. The two most common mechanisms are known as HTTP long
-    polling and HTTP streaming. Both are described RFC 6202 [ref]. As
-    the name implies, long polling consists of sending a request to
-    the server, who will delay its response until there is data to
-    transmit. When the client receives the response, it immediately
-    sends a new request for the next update. In HTTP streaming, the
-    server sends its response in parts, thus keeping the connection
-    with the client alive, until its renewal after a set amount of
-    time. While more efficient than short polling, both have
-    disadvantages over a straightforward TCP socket. When renewing the
-    long poll request or stream, messages can not be sent from the
-    server, and must thus be buffered until the connection is
+    polling and HTTP streaming. Both are described RFC 6202
+    \cite{rfc6202}. As the name implies, long polling consists of
+    sending a request to the server, who will delay its response until
+    there is data to transmit. When the client receives the response,
+    it immediately sends a new request for the next update. In HTTP
+    streaming, the server sends its response in parts, thus keeping
+    the connection with the client alive, until its renewal after a
+    set amount of time. While more efficient than short polling, both
+    have disadvantages over a straightforward TCP socket. When
+    renewing the long poll request or stream, messages can not be sent
+    from the server, and must thus be buffered until the connection is
     established. Other difficulties may arise when intermediaries
-    (proxies, gateways) are present between the client and the
-    server, as they may decide to cache the server responses, thus
-    defeating the mechanism. Best practices for implementing these
-    techniques are described in the RFC.
+    (proxies, gateways) are present between the client and the server,
+    as they may decide to cache the server responses, thus defeating
+    the mechanism. Best practices for implementing these techniques
+    are described in the RFC.
 
     A better solution is to augment the HTTP protocol, allowing true,
     persistent bi-directional communication without much
     overhead. That is precisely the high-level description of the
-    WebSocket protocol [ref]. This protocol consists of establishing a
-    TCP connection between a client and a server, allowing two-way
-    message passing after an HTTP handshake part. Using the HTTP
-    request/response model, both client and server acknowledge of an
-    "HTTP upgrade" to use the WebSocket protocol. Once they agree,
-    messages can be freely sent between both entities until the
-    connection is closed. In addition to the TCP connection, the
-    WebSocket protocol provides:
+    WebSocket protocol \cite{ws-prot}. This protocol consists of
+    establishing a TCP connection between a client and a server,
+    allowing two-way message passing after an HTTP handshake
+    part. Using the HTTP request/response model, both client and
+    server acknowledge of an "HTTP upgrade" to use the WebSocket
+    protocol. Once they agree, messages can be freely sent between
+    both entities until the connection is closed. In addition to the
+    TCP connection, the WebSocket protocol provides:
 
     #+BEGIN_QUOTE
     - a Web "origin"-based security model for browsers;
@@ -360,13 +382,14 @@
     domain. Scripts from other domains do not have legitimate access
     to resources (scripts, sockets) of others.
 
-    The WebSocket API offered to web browsers scripts is rather
-    straightforward, and event-based. In simple setups, the client
-    only has to create a WebSocket object, then register function
-    callbacks for the following events: connection open, message
-    received, connection closed. The WebSocket object can be used to
-    send messages to the server, and to close the connection. Messages
-    can either be sent as UTF-8 strings or as raw binary.
+    The WebSocket API \cite{ws-api} offered to web browsers scripts is
+    rather straightforward, and event-based. In simple setups, the
+    client only has to create a WebSocket object, then register
+    function callbacks for the following events: connection open,
+    message received, connection closed. The WebSocket object can be
+    used to send messages to the server, and to close the
+    connection. Messages can either be sent as UTF-8 strings or as raw
+    binary.
 
 ** Node
    Obviously, WebSocket support is required both on the client and on
@@ -374,12 +397,12 @@
    script executes to detect WebSocket support in the browser, and act
    accordingly. On the server front, the choice is more limited. The
    early prototype of Spacewar used a PHP implementation of the
-   WebSocket protocol on the server [ref]. Back then, the server was
-   only used to pass messages around between clients. All the game
-   logic was handled by the clients themselves, and each client sent
-   its state to all the others, via the server. It quickly became
-   clear however that this PHP implementation of WebSocket was meant
-   for trivial demonstrations purposes, but not for real applications.
+   WebSocket protocol on the server. Back then, the server was only
+   used to pass messages around between clients. All the game logic
+   was handled by the clients themselves, and each client sent its
+   state to all the others, via the server. It quickly became clear
+   however that this PHP implementation of WebSocket was meant for
+   trivial demonstrations purposes, but not for real applications.
 
    As a result of the WebSocket protocol being recent and not
    finalized, the number of implementations outside of web browser is
@@ -403,12 +426,12 @@
    Secondly, the chosen JavaScript implementation of the WebSocket
    protocol is actually a module for a high-performance server
    back-end software running JavaScript code, called Node (or node.js)
-   [ref]. At the core, Node is an abstraction of asynchronous I/O with
-   a layer of web-oriented networking facilities designed for building
-   scalable web servers. Under the hood Node is running Google's V8
-   JavaScript engine, which allow users to program all their server
-   code using only JavaScript, although Node itself is essentially
-   C++.
+   \cite{node}. At the core, Node is an abstraction of asynchronous
+   I/O with a layer of web-oriented networking facilities designed for
+   building scalable web servers. Under the hood Node is running
+   Google's V8 JavaScript engine, which allow users to program all
+   their server code using only JavaScript, although Node itself is
+   essentially C++.
    
    With the growing number of Internet users, it is not uncommon for
    web hosts serving popular content to handle a million or more daily
@@ -453,12 +476,12 @@
    Node also aims to be very modular: even core features are provided
    as modules lazily loadable in a server program. The WebSocket
    protocol is available in Node thanks to such modules. Spacewar uses
-   the one named Socket.IO [ref]. While other modules expose the bare
-   WebSocket protocol in Node, Socket.IO can fallback to other
-   protocols (like AJAX, HTTP long polling or HTTP streaming) if the
-   client has no support for WebSocket. This is highly convenient,
-   given the discrepancies between browsers as well as between
-   a browser's different versions.
+   the one named Socket.IO \cite{socket-io}. While other modules
+   expose the bare WebSocket protocol in Node, Socket.IO can fallback
+   to other protocols (like AJAX, HTTP long polling or HTTP streaming)
+   if the client has no support for WebSocket. This is highly
+   convenient, given the discrepancies between browsers as well as
+   between a browser's different versions.
      
 * Inner workings
 
@@ -1031,7 +1054,9 @@
   - Merwan for the gas
   - Bertelle, Duvallet, Sanlaville.
 
-* Links
+#+LaTeX: \printbibliography
+
+* Links                                                            :noexport:
 ** JavaScript
    - [[https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml][Google JavaScript Style Guide]], Aaron Whyte et al.
    - [[http://bonsaiden.github.com/JavaScript-Garden/][JavaScript Garden]], Ivo Wetzel and Zhang Yi Jiang, 2011.
@@ -1049,8 +1074,8 @@
    
 ** HTML5 drawing
   - [[http://webstuff.nfshost.com/anim-timing/Overview.html][Timing control for script-based animations]], February 22, 2011
-  - [[http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#the-canvas-element][HTML Standard: the canvas element]], May 27, 2011
-  - [[http://www.khronos.org/registry/webgl/specs/latest/#7][WebGL Specification]], May 25, 2011
+  - [[http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html][HTML Standard: the canvas element]], May 27, 2011
+  - [[http://www.khronos.org/registry/webgl/specs/latest/][WebGL Specification]], May 25, 2011
   - [[http://media.tojicode.com/q3bsp/][Quake 3 WebGL Demo]], Brandon Jones.
   - [[http://www.ro.me][ROME, "3 Dreams of Black"]], Chris Milk.
 
