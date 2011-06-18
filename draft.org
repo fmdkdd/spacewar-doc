@@ -9,7 +9,7 @@
 #+LATEX_CMD: xelatex
 #+LATEX_CLASS: article
 #+LATEX_CLASS_OPTIONS: [a4paper, 12pt]
-#+OPTIONS: toc:t
+#+OPTIONS: toc:nil
 
 ## Font selection
 #+LATEX_HEADER: \setmainfont[Mapping=tex-text, Numbers={OldStyle, Proportional}, OpticalSize=0]{Utopia Std}
@@ -47,6 +47,57 @@
 
 ## Utilities
 #+LATEX_HEADER: \renewcommand{\sc}[1]{\textsc{#1}}
+
+#+LaTeX: \setcounter{tocdepth}{3}
+#+LaTeX: \tableofcontents
+
+#+LaTeX: \section*{Acknowledgments}
+  Like any creative project, Spacewar was not conceived in a vacuum ;
+  it is not the product of any solitary mind cloistered from outside
+  influences. To the contrary, it was nourished by past experiences,
+  discussions with friends and family, and extensive readings. Even
+  though it is our own, original work, we would like to acknowledge of
+  the most important contributors, be they direct or indirect.
+
+  As stated previously, the original idea for Spacewar was inspired by
+  Slingshot by Jonathan Musther and Bart Mak. Other inspirations were
+  the eponymous /Spacewar!/ conceived by Steve Russel, Martin Graetz
+  and Wayne Witaenem on a \sc{dec} \sc{pdp-1} at \sc{mit} in 1961, and
+  Ambrosia Software's /Escape Velocity/ series. Slingshot was
+  introduced to us by fellow students Adrien Bruyere, David Ducatel
+  and Thibaut Demare. Having already toyed with ships and WebSocket,
+  seeing the gravity gimmick of Slingshot initially inspired us to
+  make a browser-based multiplayer light version of it.
+
+  We would like to sincerely thank fellow hacker Merwan Achibet for
+  continually bringing new ideas to Spacewar and refilling our
+  motivation gauge. Your overnight commits are always a joy to test
+  and fix. Students who helped us play-test Spacewar outside and
+  during classes also deserve recognition, though it might be in
+  their best interest to remain anonymous.
+
+  Spacewar was meant to be a side project, not our main semester
+  project at university. Due to the difficulties encountered with our
+  initial project topic, we ended up switching, all for the best. This
+  of course would not have been possible without the understanding of
+  Cyrille Bertelle, my former project adviser, Claude Duvallet,
+  adviser for Spacewar, and Eric Sanlaville, supervisor of our
+  university degree.
+
+  These acknowledgments would not be complete without mentioning the
+  authors of the main tools and libraries we used to develop Spacewar.
+  Already cited were the JavaScript language by Brendan Eich,
+  CoffeeScript by Jeremy Ashkenas, Node by Ryan Dahl, Socket.IO by
+  Guillermo Rauch. The browsers we use daily to run Spacewar are
+  Firefox by Mozilla and Chrome by Google. The code to Spacewar is
+  managed with the distributed revision control system Git authored by
+  Linus Torvalds, and remotely hosted at GitHub which was created by
+  Chris Wanstrath, PJ Hyett and Tom Preston-Werner. Most of these
+  projects are open source, and while we mentioned their initial
+  authors, we do not forget all of their contributors. Lastly, our
+  fingers would like to thank \sc{gnu} Emacs, for all the hours saved.
+
+#+LaTeX: \newpage
 
 * Rationale
   Creating a full-fledged video game is an entertaining way to learn
@@ -463,7 +514,6 @@
    if the client has no support for WebSocket. This is highly
    convenient, given the discrepancies between browsers as well as
    between a browser's different versions.
-
 * Other works
   Spacewar arose from the want to see some dog-fighting space action
   in web browsers leveraging modern technologies. Outside of the gravity
@@ -989,7 +1039,6 @@
     around. Collision checks thus have to work on parts rather than
     whole objects. Other optimizations rely on ensuring game objects
     are tangible before diving into costly computations.
-
 * Future improvements
   In the current state, Spacewar is playable, enjoyable and rather
   stable. However, there is still room for improvement. On the short
@@ -1063,52 +1112,6 @@
   continue to do so until we run out of ideas to improve Spacewar.
   Then we will acknowledge of the game maturity, rest a while, and
   move on to another project, ready to learn anew.
-
-* Acknowledgments
-  Like any creative project, Spacewar was not conceived in a vacuum ;
-  it is not the product of any solitary mind cloistered from outside
-  influences. To the contrary, it was nourished by past experiences,
-  discussions with friends and family, and extensive readings. Even
-  though it is our own, original work, we would like to acknowledge of
-  the most important contributors, be they direct or indirect.
-
-  As stated previously, the original idea for Spacewar was inspired by
-  Slingshot by Jonathan Musther and Bart Mak. Other inspirations were
-  the eponymous /Spacewar!/ conceived by Steve Russel, Martin Graetz
-  and Wayne Witaenem on a \sc{dec} \sc{pdp-1} at \sc{mit} in 1961, and
-  Ambrosia Software's /Escape Velocity/ series. Slingshot was
-  introduced to us by fellow students Adrien Bruyere, David Ducatel
-  and Thibaut Demare. Having already toyed with ships and WebSocket,
-  seeing the gravity gimmick of Slingshot initially inspired us to
-  make a browser-based multiplayer light version of it.
-
-  We would like to sincerely thank fellow hacker Merwan Achibet for
-  continually bringing new ideas to Spacewar and refilling our
-  motivation gauge. Your overnight commits are always a joy to test
-  and fix. Students who helped us play-test Spacewar outside and
-  during classes also deserve recognition, though it might be in
-  their best interest to remain anonymous.
-
-  Spacewar was meant to be a side project, not our main semester
-  project at university. Due to the difficulties encountered with our
-  initial project topic, we ended up switching, all for the best. This
-  of course would not have been possible without the understanding of
-  Cyrille Bertelle, my former project adviser, Claude Duvallet,
-  adviser for Spacewar, and Eric Sanlaville, supervisor of our
-  university degree.
-
-  These acknowledgments would not be complete without mentioning the
-  authors of the main tools and libraries we used to develop Spacewar.
-  Already cited were the JavaScript language by Brendan Eich,
-  CoffeeScript by Jeremy Ashkenas, Node by Ryan Dahl, Socket.IO by
-  Guillermo Rauch. The browsers we use daily to run Spacewar are
-  Firefox by Mozilla and Chrome by Google. The code to Spacewar is
-  managed with the distributed revision control system Git authored by
-  Linus Torvalds, and remotely hosted at GitHub which was created by
-  Chris Wanstrath, PJ Hyett and Tom Preston-Werner. Most of these
-  projects are open source, and while we mentioned their initial
-  authors, we do not forget all of their contributors. Lastly, our
-  fingers would like to thank \sc{gnu} Emacs, for all the hours saved.
 
 #+LaTeX: \printbibliography
 
