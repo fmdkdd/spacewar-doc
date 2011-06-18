@@ -1,35 +1,44 @@
 # Draft of articles documenting Spacewar.
-#+Title: Building a multiplayer space action game in HTML5
+#+Title: Building a multiplayer space action game in \sc{html5}
 #+Author: Florent Marchand de Kerchove
 #+Email: fmdkdd@gmail.com
+#+Date: June 2011
 #+Language: en
 
-# Export to latex 
-#+LATEX_CMD: pdflatex
+## Export to latex 
+#+LATEX_CMD: xelatex
 #+LATEX_CLASS: article
-#+LATEX_CLASS_OPTIONS: [a4paper, 12pt]
+#+LATEX_CLASS_OPTIONS: [a4paper, draft, 12pt]
+#+OPTIONS: toc:t
 
-# Font selection
-#-LATEX_HEADER: \setmainfont[Mapping=tex-text]{Minion Pro}
-#+LATEX_HEADER: \usepackage{libertine}
+## Font selection
+#+LATEX_HEADER: \setmainfont[Mapping=tex-text, Numbers={OldStyle, Proportional}, OpticalSize=0]{Utopia Std}
+#+LATEX_HEADER: \newfontfamily\progfont[Numbers={Lining}, Scale=MatchLowercase]{Utopia Std}
+#+LATEX_HEADER: \setmonofont[Mapping=tex-text, Scale=MatchLowercase]{Utopia Std}
 
-# Code listings styling
+## Code listings styling
 #+LATEX_HEADER: \usepackage{xcolor}
-#+LATEX_HEADER: \definecolor{racoon}{hsb}{0.1, 0.3, 0.5}
+#+LATEX_HEADER: \definecolor{racoon}{rgb}{0.6, 0.6, 0.7}
 
-#+LATEX_HEADER: \lstset{tabsize=3, breaklines=false, columns=fullflexible}
-#+LATEX_HEADER: \lstset{frame=leftline, framerule=2pt, rulecolor=\color{racoon}}
+#+LATEX_HEADER: \lstset{basicstyle=\progfont}
+#+LATEX_HEADER: \lstset{tabsize=3, columns=fullflexible}
+#+LATEX_HEADER: \lstset{breaklines=false, showstringspaces=false}
+#+LATEX_HEADER: \lstset{frame=leftline, framerule=1pt, rulecolor=\color{racoon}}
+#+LATEX_HEADER: \lstset{xleftmargin=7pt, framesep=5pt}
 
 #+LATEX_HEADER: \lstnewenvironment{javascript}
-#+LATEX_HEADER: {\lstset{ language={C}, keywords={var, function} }}{}
+#+LATEX_HEADER: {\lstset{ language={C}, morekeywords={var, function} }}{}
 
 #+LATEX_HEADER: \lstnewenvironment{coffeescript}
-#+LATEX_HEADER: {\lstset{ language={Ruby} }}{}
+#+LATEX_HEADER: {\lstset{ language={Ruby}, morekeywords={of} }}{}
 #+BIND: org-export-latex-custom-lang-environments ((espresso "javascript") (coffee "coffeescript"))
 
-# Bibliography setup
+## Bibliography setup
 #+LATEX_HEADER: \usepackage{biblatex}
 #+LATEX_HEADER: \addbibresource{draft.bib}
+
+## Utilities
+#+LATEX_HEADER: \renewcommand{\sc}[1]{\textsc{#1}}
 
 * Rationale
   Creating a full-fledged video game is an entertaining way to learn
@@ -86,67 +95,32 @@
   capabilities, we decided to favor the mechanics and to take
   advantage of humans' adaptability. The second reason to have
   multiplayer was to get acquainted with the WebSocket protocol, part
-  of the HTML5 working standard. This recent development of web
+  of the \sc{html5} working standard. This recent development of web
   technologies allows stable and efficient bidirectional communication
-  between a browser and a server over the HTTP protocol. A multiplayer
+  between a browser and a server over the \sc{http} protocol. A multiplayer
   game involves frequent communications between clients and the
   server: more than fifty updates are broadcasted to clients every
   second. Therefore, a frantic multiplayer game with WebSockets would
   stand as a strong testimony of the protocol robustness.
 
-* Other works
-  Spacewar arose from the want to see some dog-fighting space action
-  in web browsers leveraging modern technologies. Outside of the gravity
-  gimmick inspired by the open source game Slingshot \cite{slingshot},
-  there was no direct influence by other works until we took a peek at
-  what was available.
+* Founding technologies
 
-  Strangely enough, the space setting seems to be popular, as at least
-  two games built with JavaScript and Node bear the same premises. The
-  first one is Lazeroids \cite{lazeroids}. The server was initially
-  conceived using Ruby on Rails over a week-end competition, and later
-  converted to Node. The gameplay is a voluntary homage to the classic
-  1979 arcade game Asteroids where a lone spaceship fires round-shaped
-  bullets at dangerously concave asteroids drifting in the otherwise
-  empty space. Lazeroids allow multiple players to play in the same
-  world and feature a score board. Attacking other players did not
-  seem to work right when we tried it, and the gameplay also feels
-  dated, with reason. Still, one must keep in mind that Lazeroids was
-  conceived as a demonstration of Ruby on Rails and HTML5 capabilities
-  over a 48-hours period.
-
-  The second space-inspired browser game is Rawkets \cite{rawkets}. Here
-  the focus is on player versus player combat, as there are no other
-  interactions with the world. The fighting stage is delimited by a
-  thick rectangular wall, and the combat is very basic. Ships fire
-  bullets that go straight ahead dealing damage to the first target
-  hit. Ships can sustain some damage before exploding, and recover
-  damage over time. The graphics are elementary, except for the
-  somewhat fancy static background and interface. There are even sound
-  effects and a background music [fn:: Rawkets uses Adobe Flash for
-  sound. Although the HTML5 standard introduces an audio API, browser
-  implementations might have been lacking when Rawkets was
-  conceived.]. Like Lazeroids, Rawkets primary purpose is to
-  demonstrate the capabilities of HTML5 and Node in the fun setting of
-  a multiplayer space fighting game.
-
-* The technology behind Spacewar
-
-** HTML5 standard
-   The Web Hypertext Application Technology Working Group (WHATWG) has
-   been spearheading web technology innovation since 2004, branching
-   off the World Wide Web Consortium (W3C) to draft the HTML5
-   specification, when the W3C was solely focused on XHTML 2.0. In
-   2009, the W3C abandoned XHTML 2.0 and reunited with the WHATWG to
-   formalize HTML5. While the specification has yet to be finished at
-   the time of this writing, some parts are stable and already
-   implemented in most web browsers. The canvas element Spacewar uses
-   for drawing is such a part, but the WebSocket protocol is still
-   evolving. It is decidedly rewarding to work with such fresh
-   technologies and to follow the changes they are going through, as
-   the lack of documentation means we have to look up at the
-   specification itself for information, and at browser
-   implementations as well for details.
+** \sc{html5} standard
+   The Web Hypertext Application Technology Working Group
+   (\sc{whatwg}) has been spearheading web technology innovation
+   since 2004, branching off the World Wide Web Consortium
+   (\sc{w3c}) to draft the \sc{html5} specification, when the
+   \sc{w3c} was solely focused on \sc{xhtml} 2.0. In 2009, the
+   \sc{w3c} abandoned \sc{xhtml} 2.0 and reunited with the
+   \sc{whatwg} to formalize \sc{html5}. While the
+   specification has yet to be finished at the time of this writing,
+   some parts are stable and already implemented in most web
+   browsers. The canvas element Spacewar uses for drawing is such a
+   part, but the WebSocket protocol is still evolving. It is decidedly
+   rewarding to work with such fresh technologies and to follow the
+   changes they are going through, as the lack of documentation means
+   we have to look up at the specification itself for information, and
+   at browser implementations as well for details.
 
 *** JavaScript
     JavaScript is the programming language of web browsers. Introduced
@@ -244,26 +218,26 @@
     reasons.
 
 *** Canvas
-    The canvas HTML element \cite{canvas} is an important part of
-    HTML5. It was initially created by Apple for Safari and the Mac OS
+    The canvas \sc{html} element \cite{canvas} is an important part of
+    \sc{html5}. It was initially created by Apple for Safari and the Mac OS
     X Dashboard, but is now implemented in all the major web browsers
     [fn:: By major web browsers, we mean Firefox, Chrome, Internet
     Explorer, Safari and Opera.].
 
     The intent is to provide an area on web pages upon which to draw
-    freely, as an alternative to vector graphics provided by SVG
-    (Scalable Vector Graphics). While SVG already allowed scripted
+    freely, as an alternative to vector graphics provided by \sc{svg}
+    (Scalable Vector Graphics). While \sc{svg} already allowed scripted
     animations to be run freely on web pages since its initial release
-    in 2001, SVG images have to be inserted into the DOM tree, and
-    this can be a significant computation overhead if lots of SVG
-    images are inserted and removed from the DOM tree. When fast
+    in 2001, \sc{svg} images have to be inserted into the \sc{dom} tree, and
+    this can be a significant computation overhead if lots of \sc{svg}
+    images are inserted and removed from the \sc{dom} tree. When fast
     animations are required, this overhead is unacceptable. Being a
-    single DOM element, the canvas provides a potentially faster way
-    to draw animation than SVG. But these two graphics solutions are
+    single \sc{dom} element, the canvas provides a potentially faster way
+    to draw animation than \sc{svg}. But these two graphics solutions are
     not interchangeable.
 
     First, the canvas is bitmap-based. This means that graphics drawn
-    on the canvas are resolution dependent, whereas SVG animations are
+    on the canvas are resolution dependent, whereas \sc{svg} animations are
     freely scalable. Bitmap graphics are faster to process, thus well
     suited to animations that require a high number of frames every
     second, like games. Scalable graphics are great for everything
@@ -277,7 +251,7 @@
     present. Implementations of this 3d context in major browsers is
     ongoing. The latest Firefox, Chrome, Safari and Opera browsers
     support WebGL, but not on all platforms. Besides, since calling
-    the GPU driver directly can lead to crashes unrelated with the
+    the \sc{gpu} driver directly can lead to crashes unrelated with the
     browser itself (caused by faulty drivers or poor graphics
     management in the OS), WebGL support can be deactivated by default
     in some browsers, or for unsupported hardware. Nonetheless, some
@@ -293,25 +267,25 @@
     have.
 
     The consequence of providing all those facilities to web scripts,
-    both versatile with SVG and powerful with the canvas element, is
+    both versatile with \sc{svg} and powerful with the canvas element, is
     the diminishing need for proprietary alternatives like Adobe Flash
     or Microsoft Silverlight. A few year back, Adobe Flash was the de
     facto standard for web animations. Today, with browsers adopting
-    HTML5 standard and especially the canvas element, animations can
+    \sc{html5} standard and especially the canvas element, animations can
     both be fast and portable. Furthermore, the specification is fully
     open, as are implementations in most browsers.
       
     Spacewar makes full use of the canvas element. All the game is
-    currently drawn on it, and it fills the entire web page. Some SVG
+    currently drawn on it, and it fills the entire web page. Some \sc{svg}
     images are also used for the configuration menu.
     
 *** WebSocket
     The major part of Spacewar is its multiplayer aspect: having
     multiple players participating in the same game, each using a
     different browser on their own computer. This is enabled by the
-    introduction of WebSockets to HTML5.
+    introduction of WebSockets to \sc{html5}.
 
-    The HTTP protocol was conceived as a unidirectional protocol: from
+    The \sc{http} protocol was conceived as a unidirectional protocol: from
     the client to the server. The server can not initiate an
     unsolicited connection with a client, and is only allowed to send
     data to the client in response to a previous request from the
@@ -326,54 +300,53 @@
 
     To receive update in a timely fashion, the polling frequency
     should be short, around 5 seconds. This means that every 5
-    seconds, a HTTP request is sent to the server, and a response is
-    received. Sending a new HTTP request requires establishing a TCP
+    seconds, a \sc{http} request is sent to the server, and a response is
+    received. Sending a new \sc{http} request requires establishing a \sc{tcp}
     connection with the server, and that in turn takes some round
     trips between the client and the server. In addition, the request
-    and response have to contain HTTP headers that add to the packets'
+    and response have to contain \sc{http} headers that add to the packets'
     size, though the information they transmit is mostly the same each
     time. This short polling technique is thus very inefficient, as
-    not only time is wasted by setting up a full TCP communication
+    not only time is wasted by setting up a full \sc{tcp} communication
     each time, but bandwidth is also squandered.
 
     To alleviate these problems, more refined techniques have come to
-    light. The two most common mechanisms are known as HTTP long
-    polling and HTTP streaming. Both are described RFC 6202
+    light. The two most common mechanisms are known as \sc{http} long
+    polling and \sc{http} streaming. Both are described \sc{rfc} 6202
     \cite{rfc6202}. As the name implies, long polling consists of
     sending a request to the server, who will delay its response until
     there is data to transmit. When the client receives the response,
-    it immediately sends a new request for the next update. In HTTP
+    it immediately sends a new request for the next update. In \sc{http}
     streaming, the server sends its response in parts, thus keeping
     the connection with the client alive, until its renewal after a
     set amount of time. While more efficient than short polling, both
-    have disadvantages over a straightforward TCP socket. When
+    have disadvantages over a straightforward \sc{tcp} socket. When
     renewing the long poll request or stream, messages can not be sent
     from the server, and must thus be buffered until the connection is
     established. Other difficulties may arise when intermediaries
     (proxies, gateways) are present between the client and the server,
     as they may decide to cache the server responses, thus defeating
     the mechanism. Best practices for implementing these techniques
-    are described in the RFC.
+    are described in the \sc{rfc}.
 
-    A better solution is to augment the HTTP protocol, allowing true,
+    A better solution is to augment the \sc{http} protocol, allowing true,
     persistent bi-directional communication without much
     overhead. That is precisely the high-level description of the
     WebSocket protocol \cite{ws-prot}. This protocol consists of
-    establishing a TCP connection between a client and a server,
-    allowing two-way message passing after an HTTP handshake
-    part. Using the HTTP request/response model, both client and
-    server acknowledge of an "HTTP upgrade" to use the WebSocket
+    establishing a \sc{tcp} connection between a client and a server,
+    allowing two-way message passing after an \sc{http} handshake
+    part. Using the \sc{http} request/response model, both client and
+    server acknowledge of an "\sc{http} upgrade" to use the WebSocket
     protocol. Once they agree, messages can be freely sent between
     both entities until the connection is closed. In addition to the
-    TCP connection, the WebSocket protocol provides:
+    \sc{tcp} connection, the WebSocket protocol provides other features. To
+    quote the protocol draft:
 
-    #+BEGIN_QUOTE
     - a Web "origin"-based security model for browsers;
     - an addressing and protocol naming mechanism to support multiple
       services on one port and multiple host names on one IP address;
-    - a framing mechanism on top of TCP to get back to the IP
-      packet mechanism that TCP is built on, but without length limits.
-    #+END_QUOTE
+    - a framing mechanism on top of \sc{tcp} to get back to the IP
+      packet mechanism that \sc{tcp} is built on, but without length limits.
 
     The WebSocket protocol enforces the same origin policy commonly
     used in web browsers. Basically, WebSockets established between a
@@ -388,21 +361,21 @@
     function callbacks for the following events: connection open,
     message received, connection closed. The WebSocket object can be
     used to send messages to the server, and to close the
-    connection. Messages can either be sent as UTF-8 strings or as raw
-    binary.
+    connection. Messages can either be sent as \sc{utf-8} strings or
+    as raw binary.
 
 ** Node
    Obviously, WebSocket support is required both on the client and on
    the server. On the client side, a check may be done when the game
    script executes to detect WebSocket support in the browser, and act
    accordingly. On the server front, the choice is more limited. The
-   early prototype of Spacewar used a PHP implementation of the
+   early prototype of Spacewar used a \sc{php} implementation of the
    WebSocket protocol on the server. Back then, the server was only
    used to pass messages around between clients. All the game logic
    was handled by the clients themselves, and each client sent its
    state to all the others, via the server. It quickly became clear
-   however that this PHP implementation of WebSocket was meant for
-   trivial demonstrations purposes, but not for real applications.
+   however that this \sc{php} implementation of WebSocket was meant
+   for trivial demonstrations purposes, but not for real applications.
 
    As a result of the WebSocket protocol being recent and not
    finalized, the number of implementations outside of web browser is
@@ -463,14 +436,14 @@
 
    Since all the work with asynchronous I/O is done in callbacks, this
    directly translates into programming for events, a recurrent
-   pattern of web programming. For instance, an HTTP server will have
+   pattern of web programming. For instance, an \sc{http} server will have
    a function to handle a "request" event. Every request sent to the
    server will wake up Node, trigger this function, and send Node to
    sleep once the function has returned. It must be noted that since
    no threading is involved, the callbacks execute sequentially rather
    than concurrently. In particular, callbacks that are slow to return
    will become a bottleneck for the server scalability. Nevertheless,
-   the event-driven approach is quite fit to the HTTP request/response
+   the event-driven approach is quite fit to the \sc{http} request/response
    model, as well as other network applications.
 
    Node also aims to be very modular: even core features are provided
@@ -478,10 +451,46 @@
    protocol is available in Node thanks to such modules. Spacewar uses
    the one named Socket.IO \cite{socket-io}. While other modules
    expose the bare WebSocket protocol in Node, Socket.IO can fallback
-   to other protocols (like AJAX, HTTP long polling or HTTP streaming)
+   to other protocols (like Ajax, \sc{http} long polling or \sc{http} streaming)
    if the client has no support for WebSocket. This is highly
    convenient, given the discrepancies between browsers as well as
    between a browser's different versions.
+
+* Other works
+  Spacewar arose from the want to see some dog-fighting space action
+  in web browsers leveraging modern technologies. Outside of the gravity
+  gimmick inspired by the open source game Slingshot \cite{slingshot},
+  there was no direct influence by other works until we took a peek at
+  what was available.
+
+  Strangely enough, the space setting seems to be popular, as at least
+  two games built with JavaScript and Node bear the same premises. The
+  first one is Lazeroids \cite{lazeroids}. The server was initially
+  conceived using Ruby on Rails over a week-end competition, and later
+  converted to Node. The gameplay is a voluntary homage to the classic
+  1979 arcade game Asteroids where a lone spaceship fires round-shaped
+  bullets at dangerously concave asteroids drifting in the otherwise
+  empty space. Lazeroids allow multiple players to play in the same
+  world and feature a score board. Attacking other players did not
+  seem to work right when we tried it, and the gameplay also feels
+  dated, with reason. Still, one must keep in mind that Lazeroids was
+  conceived as a demonstration of Ruby on Rails and \sc{html5} capabilities
+  over a 48-hours period.
+
+  The second space-inspired browser game is Rawkets \cite{rawkets}. Here
+  the focus is on player versus player combat, as there are no other
+  interactions with the world. The fighting stage is delimited by a
+  thick rectangular wall, and the combat is very basic. Ships fire
+  bullets that go straight ahead dealing damage to the first target
+  hit. Ships can sustain some damage before exploding, and recover
+  damage over time. The graphics are elementary, except for the
+  somewhat fancy static background and interface. There are even sound
+  effects and a background music [fn:: Rawkets uses Adobe Flash for
+  sound. Although the \sc{html5} standard introduces an audio API, browser
+  implementations might have been lacking when Rawkets was
+  conceived.]. Like Lazeroids, Rawkets primary purpose is to
+  demonstrate the capabilities of \sc{html5} and Node in the fun setting of
+  a multiplayer space fighting game.
      
 * Inner workings
 
@@ -495,7 +504,7 @@
     added twist of compensating for the surrounding planets' gravity
     that draws spaceship fire.
 
-    Browsing to the game server's URL immediately jumps the client
+    Browsing to the game server's \sc{url} immediately jumps the client
     into the game. Each player controls exactly one ship. The commands
     are simple: ships can rotate left or right, thrust forward, fire a
     bullet or use a bonus. Ships are brittle: one hit is all it takes
@@ -555,7 +564,7 @@
     Spacewar is divided into a client and a server program. Both are
     written in CoffeeScript, compiled to JavaScript before being
     run. The client program is intended to be executed inside a web
-    browser supporting the HTML canvas element. The server must be run
+    browser supporting the \sc{html} canvas element. The server must be run
     by Node with additional modules installed.
 
     Historically, the initial prototype of Spacewar was meant to work
@@ -638,8 +647,8 @@
 
 *** The rendering algorithm
     Drawing the game is the main role of the client, and most
-    expensive in computer time. All drawing takes place on the HTML
-    canvas element, using the 2D rendering context. The canvas is
+    expensive in computer time. All drawing takes place on the \sc{html}
+    canvas element, using the 2d rendering context. The canvas is
     stretched to fill the client's whole window, adapting to eventual
     resizing events, thus maximizing the player's view. To ensure
     smooth rendering, the scene is requested to be drawn at 60 frames
@@ -705,19 +714,23 @@
     
     #+CAPTION: Drawing the game world with (left) and without (right)
     #+CAPTION: drawInfinity.
+    #+LABEL: fig:inf
     #+ATTR_LaTeX: width=\textwidth
     [[./img/infinity.png]]
 
-    On figure X, the game screen is shown without calling drawInfinity
-    (Xa), then with drawInfinity (Xb). In Xa, the visible part of the
-    game map is first drawn at the left of the canvas, leaving a blank
-    area to the right, where the map ends. Since the map is a torus,
-    there can not be any undrawn part on the canvas. Here the right
-    part of the canvas should show the leftmost area of the game
-    map. That is precisely what the drawInfinity method does: it
-    redraws the map at the edges of the original map by translating
-    it. The method collects the edges currently visible by the player
-    and draws the map for each one.
+    On figure \ref{fig:inf}, the game screen is shown without calling
+    drawInfinity (right-hand part), as well as with drawInfinity
+    (left-hand part). Without drawInfinity, the visible part of the
+    game map is drawn at the center of the canvas, leaving the area
+    outside of the map blank. Since the map is a torus, there can not
+    be any undrawn part on the canvas. Here the right part of the
+    canvas should show the leftmost area of the game map, the top part
+    should show the bottom of the map, and so on. That is precisely
+    what the drawInfinity method does: it redraws the map at the edges
+    of the original map by translating it. The method collects the
+    edges currently visible by the player and draws the map for each
+    one. The results are witnessed on the left of figure
+    \ref{fig:inf}, where the map is cloned to fill the whole canvas.
 
     While this drawing method ensures the world is correctly rendered
     as a torus, there are additional details to take care off. First,
@@ -742,7 +755,7 @@
     #+ nearest ghost
 
 *** Rendering performance
-    Drawing to the canvas at 60 frame per second, even in 2D, can tax
+    Drawing to the canvas at 60 frame per second, even in 2d, can tax
     even recent hardware. Speeding up this step is beneficial to
     gameplay, as smooth rendering is essential to fast paced
     action-oriented games. While we prefer to avoid premature
@@ -751,10 +764,10 @@
     The first optimization is avoiding to draw objects that are out of
     view. Each object is drawn only if it can be seen by the player,
     within the bounds of its screen (there is no line of sight
-    restriction). This saves CPU cycles, as even if a pixel would not
+    restriction). This saves \sc{cpu} cycles, as even if a pixel would not
     be rendered to the screen, browsers still take time doing
     operations on it. That is because the canvas element can be drawn
-    upon even if it is not attached to the DOM tree, saved for later
+    upon even if it is not attached to the \sc{dom} tree, saved for later
     purposes. Since the map can be vastly larger than the player's
     view, and full of objects rather costly to draw, this check is
     judicious.
@@ -773,14 +786,8 @@
     we can later draw this hidden canvas onto the real canvas
     presented to the player at a lower computational cost. Drawing to
     a hidden surface beforehand and applying this surface to the game
-    canvas like a stamp is a cornerstone technique of 2D game
+    canvas like a stamp is a cornerstone technique of 2d game
     programming called "spriting".
-
-    #+CAPTION: Pre-rendered drawing of a planet saved as a sprite
-    #+CAPTION: image to be stamped on the canvas to save time in the
-    #+CAPTION: rendering loop.
-    #+ATTR_LaTeX: width=2cm
-    [[./img/sprite.png]]
 
     These optimizations already proved their worth by stabilizing the
     framerate, but it must be noted that the low-level tweaking common
@@ -789,8 +796,8 @@
     charge of the lower-level operations and interaction with the
     graphic capabilities of the client's machine. While tuning for
     specific browsers is feasible, tailoring the game to the features
-    offered by a particular CPU or GPU is beyond reach. This is the
-    cost of using a scripting language running inside a
+    offered by a particular \sc{cpu} or \sc{gpu} is beyond reach. This
+    is the cost of using a scripting language running inside a
     browser. Luckily, implementers of the canvas element are committed
     to minimize this cost. For instance, both Gecko (used by Firefox)
     and WebKit (used by Chrome and Safari) engines provide double
@@ -807,9 +814,9 @@
    environment.
 
    Before launching the actual game server, some preparations are in
-   order. First, a HTTP server is started to serve the client
-   files. The second step is to bind the WebSocket to the HTTP server,
-   listening for a HTTP upgrade request initiated by the client
+   order. First, a \sc{http} server is started to serve the client
+   files. The second step is to bind the WebSocket to the \sc{http} server,
+   listening for a \sc{http} upgrade request initiated by the client
    program. Finally we setup the callbacks for the client connexion,
    disconnection and message events, initialize the game map and then
    launch the game loop.
@@ -857,7 +864,7 @@
     an added network latency between them. The server should update
     very often though, to be able to quickly respond to user input.
 
-    Let's have a look at the (abridged) update loop:
+    Let us have a look at the (abridged) update loop:
 
     #+BEGIN_SRC coffee
       update: () ->
@@ -897,7 +904,7 @@
     only has to check whether a key is pressed to update the player's
     ship accordingly. For example, if the left arrow key is pressed at
     the time the server enters the update loop, the ship's facing
-    angle will be decreased [fn:: The origin of the HTML canvas
+    angle will be decreased [fn:: The origin of the \sc{HTML} canvas
     element is at the upper left corner, with x increasing to the
     right and y increasing to the bottom. Consequently, angles of the
     unit circle increase clockwise instead of conventionally
@@ -964,7 +971,7 @@
     obtained by only checking collisions between nearby objects. To
     group objects by proximity, any form of spatial hashing can be
     used. Spacewar elected the spatial grid approach, as it is
-    straightforward and fit to the 2D rectangular map. The map is
+    straightforward and fit to the 2d rectangular map. The map is
     divided into same-sized regions at its creation. During the update
     loop, when objects are moved, they are inserted in all regions
     they overlap with. Collisions are then only checked between
@@ -995,17 +1002,17 @@
   allowed bonuses and bonuses timing. Eventually, he should be able to
   tweak the game settings so much that the created game would have a
   unique quality to it. Once he is satisfied with these settings, the
-  client can start the game. An active game would have a unique URL
+  client can start the game. An active game would have a unique \sc{url}
   attached to it. The client who created the game should forward this
-  URL to all the players he wants to spar with. Upon accessing this
-  URL, those players would immediately join the action.
+  \sc{url} to all the players he wants to spar with. Upon accessing this
+  \sc{url}, those players would immediately join the action.
 
   On the technical side, this scheme of having multiple games running
   concurrently would be interesting to implement. This might need some
-  more thought, but at this time we envision to have a delegated HTTP
+  more thought, but at this time we envision to have a delegated \sc{http}
   server program running in front of the multiple Spacewar games,
   forwarding the messages from clients to dedicated game processes,
-  depending on the access URL. This program would thus act similarly
+  depending on the access \sc{url}. This program would thus act similarly
   to a reverse proxy.
 
   In order to allow at least a dozen of those games concurrently
