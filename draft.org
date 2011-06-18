@@ -20,6 +20,8 @@
 #+LATEX_HEADER: \addtolength{\oddsidemargin}{-.2in}
 #+LATEX_HEADER: \addtolength{\evensidemargin}{-.2in}
 #+LATEX_HEADER: \addtolength{\textwidth}{.4in}
+#+LATEX_HEADER: \addtolength{\topmargin}{-.4in}
+#+LATEX_HEADER: \addtolength{\textheight}{.4in}
 #+LATEX_HEADER: \linespread{1.05}
 
 ## Code listings styling
@@ -223,7 +225,7 @@
     switch to CoffeeScript was easy to make for all the preceding
     reasons.
 
-*** Canvas
+*** Canvas element
     The canvas \sc{html} element \cite{canvas} is an important part of
     \sc{html5}. It was initially created by Apple for Safari and the Mac OS
     X Dashboard, but is now implemented in all the major web browsers
@@ -350,8 +352,8 @@
 
     - a Web "origin"-based security model for browsers;
     - an addressing and protocol naming mechanism to support multiple
-      services on one port and multiple host names on one IP address;
-    - a framing mechanism on top of \sc{tcp} to get back to the IP
+      services on one port and multiple host names on one \sc{ip} address;
+    - a framing mechanism on top of \sc{tcp} to get back to the \sc{ip}
       packet mechanism that \sc{tcp} is built on, but without length limits.
 
     The WebSocket protocol enforces the same origin policy commonly
@@ -361,12 +363,12 @@
     domain. Scripts from other domains do not have legitimate access
     to resources (scripts, sockets) of others.
 
-    The WebSocket API \cite{ws-api} offered to web browsers scripts is
-    rather straightforward, and event-based. In simple setups, the
-    client only has to create a WebSocket object, then register
-    function callbacks for the following events: connection open,
-    message received, connection closed. The WebSocket object can be
-    used to send messages to the server, and to close the
+    The WebSocket \sc{API} \cite{ws-api} offered to web browsers
+    scripts is rather straightforward, and event-based. In simple
+    setups, the client only has to create a WebSocket object, then
+    register function callbacks for the following events: connection
+    open, message received, connection closed. The WebSocket object
+    can be used to send messages to the server, and to close the
     connection. Messages can either be sent as \sc{utf-8} strings or
     as raw binary.
 
@@ -398,9 +400,9 @@
    particular interest, and was chosen for reasons we will now expose.
 
    First and foremost, since JavaScript was required for programming
-   on the client, having it as the server language helps promoting
-   code reuse and consistency. The code is clearer as a result, since
-   some client constructs are mirrored on the server.
+   the client, having it as the server language helps promoting code
+   reuse and consistency. The code is clearer as a result, since some
+   client constructs are mirrored on the server.
    
    Secondly, the chosen JavaScript implementation of the WebSocket
    protocol is actually a module for a high-performance server
@@ -1063,9 +1065,50 @@
   move on to another project, ready to learn anew.
 
 * Acknowledgments
-  - Adrien, David, Thibaut for the spark
-  - Merwan for the gas
-  - Bertelle, Duvallet, Sanlaville.
+  Like any creative project, Spacewar was not conceived in a vacuum ;
+  it is not the product of any solitary mind cloistered from outside
+  influences. To the contrary, it was nourished by past experiences,
+  discussions with friends and family, and extensive readings. Even
+  though it is our own, original work, we would like to acknowledge of
+  the most important contributors, be they direct or indirect.
+
+  As stated previously, the original idea for Spacewar was inspired by
+  Slingshot by Jonathan Musther and Bart Mak. Other inspirations were
+  the eponymous /Spacewar!/ conceived by Steve Russel, Martin Graetz
+  and Wayne Witaenem on a \sc{dec} \sc{pdp-1} at \sc{mit} in 1961, and
+  Ambrosia Software's /Escape Velocity/ series. Slingshot was
+  introduced to us by fellow students Adrien Bruyere, David Ducatel
+  and Thibaut Demare. Having already toyed with ships and WebSocket,
+  seeing the gravity gimmick of Slingshot initially inspired us to
+  make a browser-based multiplayer light version of it.
+
+  We would like to sincerely thank fellow hacker Merwan Achibet for
+  continually bringing new ideas to Spacewar and refilling our
+  motivation gauge. Your overnight commits are always a joy to test
+  and fix. Students who helped us play-test Spacewar outside and
+  during classes also deserve recognition, though it might be in
+  their best interest to remain anonymous.
+
+  Spacewar was meant to be a side project, not our main semester
+  project at university. Due to the difficulties encountered with our
+  initial project topic, we ended up switching, all for the best. This
+  of course would not have been possible without the understanding of
+  Cyrille Bertelle, my former project adviser, Claude Duvallet,
+  adviser for Spacewar, and Eric Sanlaville, supervisor of our
+  university degree.
+
+  These acknowledgments would not be complete without mentioning the
+  authors of the main tools and libraries we used to develop Spacewar.
+  Already cited were the JavaScript language by Brendan Eich,
+  CoffeeScript by Jeremy Ashkenas, Node by Ryan Dahl, Socket.IO by
+  Guillermo Rauch. The browsers we use daily to run Spacewar are
+  Firefox by Mozilla and Chrome by Google. The code to Spacewar is
+  managed with the distributed revision control system Git authored by
+  Linus Torvalds, and remotely hosted at GitHub which was created by
+  Chris Wanstrath, PJ Hyett and Tom Preston-Werner. Most of these
+  projects are open source, and while we mentioned their initial
+  authors, we do not forget all of their contributors. Lastly, our
+  fingers would like to thank \sc{gnu} Emacs, for all the hours saved.
 
 #+LaTeX: \printbibliography
 
