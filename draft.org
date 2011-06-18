@@ -8,13 +8,19 @@
 ## Export to latex 
 #+LATEX_CMD: xelatex
 #+LATEX_CLASS: article
-#+LATEX_CLASS_OPTIONS: [a4paper, draft, 12pt]
+#+LATEX_CLASS_OPTIONS: [a4paper, 12pt]
 #+OPTIONS: toc:t
 
 ## Font selection
 #+LATEX_HEADER: \setmainfont[Mapping=tex-text, Numbers={OldStyle, Proportional}, OpticalSize=0]{Utopia Std}
 #+LATEX_HEADER: \newfontfamily\progfont[Numbers={Lining}, Scale=MatchLowercase]{Utopia Std}
 #+LATEX_HEADER: \setmonofont[Mapping=tex-text, Scale=MatchLowercase]{Utopia Std}
+
+## Page layout
+#+LATEX_HEADER: \addtolength{\oddsidemargin}{-.2in}
+#+LATEX_HEADER: \addtolength{\evensidemargin}{-.2in}
+#+LATEX_HEADER: \addtolength{\textwidth}{.4in}
+#+LATEX_HEADER: \linespread{1.05}
 
 ## Code listings styling
 #+LATEX_HEADER: \usepackage{xcolor}
@@ -81,7 +87,7 @@
 
   #+CAPTION: Spacewar action shot. Two spaceships battle it out among
   #+CAPTION: planets and mines.
-  #+ATTR_LaTeX: width=.9\textwidth
+  #+ATTR_LaTeX: scale=1
   [[./img/action-shot.png]]
 
   The multiplayer aspect of the game was justified by at least two
@@ -378,23 +384,23 @@
    for trivial demonstrations purposes, but not for real applications.
 
    As a result of the WebSocket protocol being recent and not
-   finalized, the number of implementations outside of web browser is
-   not overwhelming, though sufficient. Although the protocol is not
-   overly complicated, implementing it was beyond the scope of
-   Spacewar. Besides, due to security concerns, the protocol is still
-   evolving. An implementation that can stay up to date with current
-   and future versions of the protocol is preferred. This essentially
-   means that the chosen WebSocket implementation should be popular
-   enough to ensure that it will be supported until at least the
-   protocol finalization. A rapid search indicates there are already
-   quite a few implementations for C, C#, Java, Ruby and JavaScript,
-   and more. The JavaScript implementation is of particular interest,
-   and was chosen for reasons we will now expose.
+   finalized, the number of implementations available outside of web
+   browsers is not overwhelming, though sufficient. Although the
+   protocol is not overly complicated, implementing it was beyond the
+   scope of Spacewar. Besides, due to security concerns, the protocol
+   is still evolving. An implementation that can stay up to date with
+   current and future versions of the protocol is preferred. This
+   essentially means that the chosen WebSocket implementation should
+   be popular enough to ensure that it will be supported until at
+   least the protocol finalization. A rapid search indicates there are
+   already quite a few implementations for C, C#, Java, Ruby and
+   JavaScript, and more. The JavaScript implementation is of
+   particular interest, and was chosen for reasons we will now expose.
 
    First and foremost, since JavaScript was required for programming
-   the client, having it as the server language helps promoting code
-   reuse and consistency. The code is clearer as a result, since some
-   client constructs are mirrored on the server.
+   on the client, having it as the server language helps promoting
+   code reuse and consistency. The code is clearer as a result, since
+   some client constructs are mirrored on the server.
    
    Secondly, the chosen JavaScript implementation of the WebSocket
    protocol is actually a module for a high-performance server
@@ -715,7 +721,7 @@
     #+CAPTION: Drawing the game world with (left) and without (right)
     #+CAPTION: drawInfinity.
     #+LABEL: fig:inf
-    #+ATTR_LaTeX: width=\textwidth
+    #+ATTR_LaTeX: scale=1
     [[./img/infinity.png]]
 
     On figure \ref{fig:inf}, the game screen is shown without calling
