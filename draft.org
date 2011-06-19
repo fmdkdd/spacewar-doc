@@ -142,10 +142,17 @@
   laws of space. This is still a video game, and one bereft of any
   pretension other than unadulterated fun.
 
-  #+CAPTION: Spacewar action shot. Two spaceships battle it out among
-  #+CAPTION: planets, mines and bonuses.
-  #+ATTR_LaTeX: scale=1
-  [[./img/action-shot.png]]
+  #+BEGIN_lateX
+  \begin{figure}[htb]
+  \centering
+  \begin{tikzpicture}
+    \node [draw, rectangle, thick, inner sep=0]
+     {\includegraphics[width=13cm]{img/glorious-action-shot.png}};
+  \end{tikzpicture}
+  \caption{Spacewar action shot. Spaceships battle it out among
+           planets, mines and bonuses.}
+  \end{figure}
+  #+END_latex
 
   The multiplayer aspect of the game was justified by at least two
   reasons. Firstly, playing a game with human opponents is more
