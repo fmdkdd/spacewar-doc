@@ -20,7 +20,7 @@
 #+LATEX_HEADER: \addtolength{\oddsidemargin}{-.2in}
 #+LATEX_HEADER: \addtolength{\evensidemargin}{-.2in}
 #+LATEX_HEADER: \addtolength{\textwidth}{.4in}
-#+LATEX_HEADER: \addtolength{\topmargin}{-.4in}
+#+LATEX_HEADER: \addtolength{\topmargin}{-.2in}
 #+LATEX_HEADER: \addtolength{\textheight}{.4in}
 #+LATEX_HEADER: \linespread{1.05}
 
@@ -127,7 +127,7 @@
   developments. Being a browser game, it follows a minimalistic design
   philosophy in order to accommodate the short attention span of the
   medium. This minimalism is perceptible even in the game pitch, which
-  fit in one line:
+  fits in one line:
 
   #+BEGIN_QUOTE
   "You are in space. Shoot other ships before they shoot you."
@@ -524,11 +524,11 @@
    convenient, given the discrepancies between browsers as well as
    between a different versions of the same browser.
 * Other works
-  Spacewar arose from the want to see some dog-fighting space action
-  in web browsers leveraging modern technologies. Outside of the gravity
-  gimmick inspired by the open source game Slingshot \cite{slingshot},
-  there was no direct influence by other works until we took a peek at
-  what was available.
+  Spacewar arose from our want to design and play a space action game
+  leveraging modern web technologies. Outside of the gravity gimmick
+  inspired by the open source game Slingshot \cite{slingshot}, there
+  was no direct influence by other works until we took a peek at what
+  was available.
 
   Eerily enough, the space setting seems to be popular, as at least
   two games built with JavaScript and Node bear the same premises. The
@@ -663,7 +663,7 @@
     applies to games, is to never trust the client. The client, when
     given the chance, will always try to exploit any flaw to gain
     advantage. In a game setting, this amounts to cheating, which ruins
-    the game experience of everyone else involved. This is not to say
+    the game experience for everyone else involved. This is not to say
     that all clients should be regarded as evil exploiters, as most are
     not, but care should be taken as to minimize, and even annihilate
     the risks. If by any means someone is able to gain an unfair
@@ -936,12 +936,14 @@
     offered by a particular \sc{cpu} or \sc{gpu} is beyond reach. This
     is the cost of using a scripting language running inside a
     browser. Luckily, implementers of the canvas element are committed
-    to minimize this cost. For instance, both Gecko (used by Firefox)
-    and WebKit (used by Chrome and Safari) engines provide double
-    buffering to the canvas: drawing operations are done off-screen
-    and the resulting canvas is shown only when the script is
-    sleeping, after the frame is done drawing. This is quicker than
-    directly drawing to the screen framebuffer.
+    to minimize this cost. For instance, Gecko (used by Firefox)
+    WebKit (used by Chrome and Safari) engines and the latest Internet
+    Explorer provide optional hardware acceleration of the 2d
+    rendering context. In addition, they include an implicit double
+    buffering of the canvas: drawing operations are done off-screen
+    and the canvas is refreshed only once when the script is done
+    drawing the frame. This is quicker than refreshing at every
+    drawing operation.
 
 ** Server side
    The server program is where the game actually resides, where game
@@ -954,14 +956,14 @@
    order. First, a \sc{http} server is started to serve the client
    files. The second step is to bind the WebSocket to the \sc{http} server,
    listening for a \sc{http} upgrade request initiated by the client
-   program. Finally we setup the callbacks for the client connexion,
+   program. Finally we setup the callbacks for the client connection,
    disconnection and message events, initialize the game map and then
    launch the game loop.
 
 *** Client-server communication
     When a client connects to the server, a player id number is
     established, an associated player object is created server-side,
-    then the client is notified of the connexion. Following that, the
+    then the client is notified of the connection. Following that, the
     client should request a ship, in which case the server will create
     the ship and send a full game update to the client containing all
     game objects. Once this is done, the client can play.
