@@ -264,7 +264,7 @@
     
     In light of these peculiarities, seasoned JavaScript programmers
     established a guideline of recommended JavaScript style which
-    emphasize clear and safe JavaScript programming practices
+    emphasize clear and safe programming practices
     \cite{js-garden}. Popular frameworks also tend to enforce these
     practices and have their users follow them in order to avoid
     errors that are hard to track. Another solution to alleviate these
@@ -318,24 +318,24 @@
     The canvas element also has the ability to use a 3d rendering
     context called WebGL \cite{webgl}, enabling OpenGL applications to
     be embedded in web pages and rendered using a software OpenGL
-    implementation, or even a hardware one if the proper driver is
-    present. Implementations of this 3d context in major browsers is
-    ongoing. The latest Firefox, Chrome, Safari and Opera browsers
-    support WebGL, but not on all platforms. Besides, since calling
-    the \sc{gpu} driver directly can lead to crashes unrelated with the
-    browser itself (caused by faulty drivers or poor graphics
+    implementation, or even a hardware implementation if the proper
+    driver is present. Implementations of this 3d context in major
+    browsers is ongoing. The latest Firefox, Chrome, Safari and Opera
+    browsers support WebGL, but not on all platforms. Besides, since
+    calling the \sc{gpu} driver directly can lead to crashes unrelated
+    with the browser itself (caused by faulty drivers or poor graphics
     management in the OS), WebGL support can be deactivated by default
     in some browsers, or for unsupported hardware. Nonetheless, some
     demonstrative applications already exist, with the most impressive
     being ports of famous 3d games like a Quake 3 level loader
     \cite{q3demo} or an interactive film by Chris Milk \cite{rome}.
     
-    Finally, should web applications using canvas require even more
-    processing power for their animations, major browsers are
-    beginning to provide hardware acceleration even for the 2d drawing
-    context. This is also optional and enabled client-side, due to the
-    stability issues mentioned above, but still is a nice option to
-    have when high performance is a concern.
+    Finally, should web applications using the canvas element require
+    even more processing power for their animations, major browsers
+    are beginning to provide hardware acceleration even for the 2d
+    drawing context. This is also optional and enabled client-side,
+    due to the stability issues mentioned above, but still is a nice
+    option to have when high performance is a concern.
 
     The consequence of providing all those facilities to web scripts,
     both versatile with \sc{svg} and powerful with the canvas element,
@@ -471,7 +471,7 @@
    
    Secondly, the chosen JavaScript implementation of the WebSocket
    protocol is actually a module for a high-performance server
-   back-end software running JavaScript code, called Node (or node.js)
+   software running JavaScript code, called Node (or node.js)
    \cite{node}. At the core, Node is an abstraction of asynchronous
    I/O with a layer of web-oriented networking facilities designed for
    building scalable web servers. Under the hood Node is running
