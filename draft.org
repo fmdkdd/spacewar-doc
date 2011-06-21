@@ -77,8 +77,8 @@
   continually bringing new ideas to Spacewar and refilling our
   motivation gauge. Your overnight commits are always a joy to test
   and fix. Students who helped us play-test Spacewar outside and
-  during classes also deserve recognition, though it might be in
-  their best interest to remain anonymous.
+  during classes also deserve recognition, though it might be in their
+  best interest to remain anonymous.
 
   Spacewar was meant to be a side project, not our main semester
   project at university. Due to the difficulties encountered with our
@@ -96,10 +96,19 @@
   Firefox by Mozilla and Chrome by Google. The code to Spacewar is
   managed with the distributed revision control system Git authored by
   Linus Torvalds, and is remotely hosted at GitHub, which was created
-  by Chris Wanstrath, PJ Hyett and Tom Preston-Werner. Most of these
-  projects are open source, and while we mentioned their initial
-  authors, we must not forget all of their contributors. Lastly, our
-  fingers would like to thank \sc{gnu} Emacs, for all the hours saved.
+  by Chris Wanstrath, PJ Hyett and Tom Preston-Werner.
+
+  This report was typeset in Adobe Utopia using \XeTeX by Jonathan
+  Kew. The /fontspec/ package by Will Robertson and Khaled Hosny was
+  most helpful in this endeavor. All diagrams were created with the
+  Ti\textit{k}Z \& \sc{pgf} package by Till Tantau. Most of the tools and
+  libraries we used are open source, and while we mentioned their
+  initial authors, we must not forget all of their contributors. We
+  also need to thank Merwan again for proofreading this report and
+  providing us with enlightening advice.
+
+  Lastly, our fingers would like to thank \sc{gnu} Emacs, for all the
+  hours saved.
 
 #+LaTeX: \newpage
 
