@@ -1,0 +1,98 @@
+#+Title: Élaboration d'un jeu multijoueur en HTML5
+#+Author: Florent Marchand de Kerchove
+#+Email: fmdkdd@gmail.com
+#+Date: 27 juin 2011
+#+Language: fr
+#+LATEX_CMD: xelatex
+#+LaTeX_CLASS: beamer
+#+Beamer_frame_level: 3
+
+#+Latex_Header: \setsansfont[Mapping=tex-text]{Optima LT Std}
+
+#+Latex_Header: \mode<presentation>
+#+Latex_Header: \definecolor{Backdrop}{RGB}{62, 62, 62}
+#+Latex_Header: \definecolor{Tangerine}{RGB}{223, 135, 47}
+#+Latex_Header: \definecolor{Tinkerbell}{RGB}{220, 220, 204}
+
+#+Latex_Header: \usecolortheme[named=Backdrop]{structure}
+#+Latex_Header: \setbeamercolor{normal text}{fg=Tinkerbell, bg=Backdrop}
+#+Latex_Header: \setbeamercolor{frametitle}{fg=Tangerine, bg=Backdrop}
+#+Latex_Header: \setbeamerfont{title}{series=\bfseries}
+#+Latex_Header: \setbeamercolor{title}{fg=Tangerine, bg=Backdrop}
+#+Latex_Header: \setbeamercolor{item}{fg=Tangerine}
+#+Latex_Header: \setbeamercolor{section in toc}{fg=Tangerine}
+#+Latex_Header: \setbeamerfont{footline}{size=\small}
+
+#+Latex_Header: \setbeamertemplate{items}[circle]
+#+Latex_Header: \setbeamertemplate{navigation symbols}{}
+#+Latex_Header: \setbeamertemplate{footline}[frame number]
+#+Latex_Header: \setbeamertemplate{sections/subsections in toc}[circle]
+#+Latex_Header: \setbeamertemplate{title page}[plain]
+#-Latex_Header: \setbeamertemplate{frametitle}{
+#-Latex_Header:  \insertframetitle
+#-Latex_Header:  \par
+#-Latex_Header: }
+
+* Dummy title
+** Dummy subtitle
+*** Intro
+	 [Rationale]
+
+* Technologies fondatrices
+** JavaScript
+*** Historique de JavaScript
+	 - Langage de programmation des navigateurs web
+	 - Créé en 1995 par Brendan Eich de Netscape
+	 - Standardisé sous le nom d'ECMAScript in 19??
+	 - Possibilités limitées au début
+	 - Regain d'intérêt avec Ajax
+	 - Nombreux frameworks puissants (jQuery, CommonJS, Dojo)
+	 - Présent sur la majorité des sites d'aujourd'hui
+
+*** Utilisations courantes?
+
+*** Caractéristiques de JavaScript
+	 - Descend de Scheme et Self
+	 - Langage fonctionnel, dynamique
+	 - Faiblement typé, /closures/
+	 - Héritage par prototype
+	 - Syntaxe héritée du C
+
+*** Attraits de JavaScript
+	 - Langage de haut niveau
+	 - Multi-plateforme (JVM sans installation)
+	 - Fonctionnalités asynchrones
+	 - Programmation évènementielle
+
+*** Inconvénients de JavaScript
+	 #+ Bicolonne avec exemples de code à droite
+	 - Tendance verbeuse
+	 - Globales implicites
+	 - Opérateurs d'égalité coercitifs
+
+*** CoffeeScript
+	 #+ Bicolonne avec exemples de code à droite
+	 - Langage intermédiaire qui compile vers JavaScript
+	 - Syntaxe empruntée au Ruby
+	 - Épuré et concis
+	 - Array comprehension, lambda function, bindings,
+		anonymous wrappers ...
+
+** Canvas HTML
+
+** WebSocket
+** Node.js
+
+* Derrière Spacewar
+** Règle du jeu
+** Côté client
+** Côté serveur
+
+* Dummy title 2
+** Dummy subtitle 2
+*** Merci
+	 #+Begin_beamer
+	 \begin{center}
+	 \huge Questions / Réponses
+	 \end{center}
+	 #+End_beamer
