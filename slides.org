@@ -3,10 +3,16 @@
 #+Email: fmdkdd@gmail.com
 #+Date: 27 juin 2011
 #+Language: fr
+
+## Supplementary info.
+#+Latex_Header: \institute{Université du Havre}
+
+## Beamer slideshow.
 #+LATEX_CMD: xelatex
 #+LaTeX_CLASS: beamer
 #+Beamer_frame_level: 3
 
+## Styling
 #+Latex_Header: \setsansfont[Mapping=tex-text]{Optima LT Std}
 
 #+Latex_Header: \mode<presentation>
@@ -25,18 +31,37 @@
 
 #+Latex_Header: \setbeamertemplate{items}[circle]
 #+Latex_Header: \setbeamertemplate{navigation symbols}{}
-#+Latex_Header: \setbeamertemplate{footline}[frame number]
 #+Latex_Header: \setbeamertemplate{sections/subsections in toc}[circle]
 #+Latex_Header: \setbeamertemplate{title page}[plain]
-#-Latex_Header: \setbeamertemplate{frametitle}{
-#-Latex_Header:  \insertframetitle
-#-Latex_Header:  \par
-#-Latex_Header: }
+#+Latex_Header: \setbeamertemplate{footline}[frame number]
+#+Latex_Header: \setbeamercolor{button}{fg=Tangerine}
+#+Latex_Header: \setbeamerfont{button}{size=\normal}
 
-* Dummy title
-** Dummy subtitle
-*** Intro
-	 [Rationale]
+## Do not number title page and outline frame.
+#+Bind: org-export-latex-title-command "\\thispagestyle{empty}\\maketitle"
+#+Bind: org-beamer-outline-frame-options "\\\\thispagestyle{empty}"
+
+## Org beamer inserts title frame and outline automatically, reset
+## frame counter.
+#+Beamer: \setcounter{framenumber}{0}
+
+#+BEGIN_lateX
+\AtBeginSection[] {
+  \begin{frame}<beamer>{}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+#+END_lateX
+
+#+BEGIN_lateX
+  \begin{frame}{Intro}
+  \begin{figure}[htb]
+    \centering
+    \includegraphics[width=10cm]{img/glorious-action-shot.png}
+  \end{figure}
+  [Glorious screenshot!] [Rationale]
+  \end{frame}
+#+END_latex
 
 * Technologies fondatrices
 ** JavaScript
@@ -48,8 +73,6 @@
 	 - Regain d'intérêt avec Ajax
 	 - Nombreux frameworks puissants (jQuery, CommonJS, Dojo)
 	 - Présent sur la majorité des sites d'aujourd'hui
-
-*** Utilisations courantes?
 
 *** Caractéristiques de JavaScript
 	 - Descend de Scheme et Self
@@ -79,17 +102,149 @@
 		anonymous wrappers ...
 
 ** Canvas HTML
+*** Surface de dessin
+	 - Permet de dessiner et d'animer librement sur une page web
+	 - Contextes 2d et 3d
+	 - Alternative aux SVG plus performante
+	 - Surface /bitmapped/ plutôt que vectoriel
+	 - Pas d'insertion dans le DOM
+	 - Accélération matérielle possible
+
+*** Dessiner sur le canvas?
+	 #+ Bi-colonne code à gauche rendu à droite
 
 ** WebSocket
+*** Protocole WebSocket
+	 - Réponse du standard aux techniques Comet
+	 - Rend obsolète HTTP /long-polling/ et HTTP /streaming/
+	 - Véritable /full-duplex/ entre client et serveur HTTP
+	 - Mise à jour de la connexion TCP créée pour la requête HTTP
+	 - Protocole en évolution
+
 ** Node.js
+*** Node.js
+	 - Serveur performant écrit en JavaScript
+	 - Entrées/sorties asynchrones
+	 - Programmation événementielle
+	 - Nombreux modules dont Socket.IO
+
+*** Exemples de Node.js
+	 - Serveur écho, chat, proxy ...
 
 * Derrière Spacewar
-** Règle du jeu
-** Côté client
-** Côté serveur
+** Principe de jeu
+*** Principe de jeu
+	 #+ Expliquer d'abord grossièrement, puis live demo.
+	 - Jeu d'action frénétique dans l'espace
+	 - À chaque joueur un vaisseau
+	 - But: tirer sur les autres et survivre
 
-* Dummy title 2
-** Dummy subtitle 2
+	 [[http://localhost:12345/][\beamergotobutton{Démonstration}]]
+
+*** Éléments du jeu
+	 - Contrôles simples :
+		- Tourner à gauche, à droite
+		- Avancer
+		- Tirer
+		- Utiliser un bonus
+	 - Carte torique
+	 - Obstacles : planètes et satellites
+	 - Trajectoire des balles affectées par la gravité des planètes
+	 - Les bonus apportent de la variété (mines, turbo, bouclier, ...)
+
+** Côté client
+*** Rôle du client
+	 - Relayer les entrées claviers au serveur
+	 - Recevoir les messages du serveur
+	 - Afficher le jeu en temps réel
+		
+	Semblable à un terminal : toute la logique est côté serveur.
+
+*** Boucle de dessin
+	 #+ Code à côté ?
+	 - Un jeu d'action requiert un rendu fluide (40 à 60 FPS)
+	 - Requiert de dessiner très rapidement une image
+	 - Canvas HTML
+
+*** Dessiner le tore
+	 #+ Schéma
+	 Donner l'illusion d'une carte torique
+	 - Remplir le canvas de copies de la carte
+	 - Appliquer la logique au tore 
+	 - Considérer les entités les plus proches sur le tore
+*** Performance
+	 - Ne pas dessiner les objets hors champ
+	 - Sauvegarder les dessins coûteux dans des /sprites/
+	 - Optimisations de bas niveau hors de notre contrôle
+	 - Accélération matérielle du canvas
+
+** Côté serveur
+*** Rôle du serveur
+	 - Gérer la logique du jeu :
+		- Initialiser la carte de jeu
+		- Mouvoir les objets (vaisseaux, planètes, balles, ...)
+		- Détecter les collisions entre objets
+		- Résoudre ces collisions
+	 - Synchroniser l'information auprès des clients
+
+*** Communications clients-serveur
+	 Connexion d'un client :
+	 - Attribution d'un identifiant
+	 - Création d'un objet /Player/ associé
+	 - Envoi de tous les objets de jeu
+
+	 Durant la partie :
+	 - Les clients envoient leurs entrées clavier
+	 - Le serveur broadcast les changements
+
+	 Déconnexion d'un client :
+	 - Notification aux autres clients
+	 - Libération des ressources associées
+
+*** Initialiser la carte de jeu
+	 - Chargement du fichier de préférences :
+		- Dimensions de la carte
+		- Nombre de planètes à placer
+		- Taille des planètes, des satellites
+		- Vitesse et distance des satellites
+	 - Placement aléatoire sans chevauchements
+		#+ Schéma d'une planète + satellite + rayon total
+		#+ Ou bien screen d'une map
+
+*** Boucle principale
+	 Étapes effectuées toutes les 20ms :
+	 - Agir en fonction des évènements clavier
+	 - Déplacer tous les objets
+	 - Détecter et résoudre les collisions
+	 - Récolter les changements d'état de chaque objet
+	 - Broadcaster les changements de tous les objets
+
+*** Gérer les collisions
+	 - Traitement symétrique centralisé
+		#+ Côté : extrait de handleCollision
+	 - Approche naïve quadratique
+	 - Vérification des collisions entre voisins
+	 - Découpage de la carte en grille
+
+*** Améliorations envisagées
+	 - Instanciation des parties
+		- Rejoindre une partie aléatoire ou entre amis
+		- Création de parties personnalisées
+	 - Communication entre joueurs
+	 - Optimisations serveur
+		- Diminuer le coût des collisions
+		- Permettre un plus grand nombre de joueur simultanés
+
+*** Améliorations envisagées (2)
+	 - Optimisations client
+		- Dessiner plus rapidement
+		- Améliorer la compatibilité avec tous les navigateurs
+	 - Éléments de jeu supplémentaires
+		- Bonus (bouclier, missile)
+		- Contenu solo
+		- Mesure de progrès (score, statistiques)
+
+
 *** Merci
 	 #+Begin_beamer
 	 \begin{center}

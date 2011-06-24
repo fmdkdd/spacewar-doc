@@ -644,7 +644,7 @@
     map, but which explodes when a ship or a bullet enters its
     detection radius. These mines are a useful to dispose of
     tailing opponents, or to set up traps in tight planet clusters.
-
+	 
 *** The decentralized prototype
     Spacewar is divided into a client and a server program. Both are
     written in CoffeeScript, compiled to JavaScript before being
