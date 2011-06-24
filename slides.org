@@ -30,16 +30,21 @@
 #+Latex_Header: \setbeamerfont{footline}{size=\small}
 
 #+Latex_Header: \setbeamertemplate{items}[circle]
-#+Latex_Header: \setbeamertemplate{navigation symbols}{}
 #+Latex_Header: \setbeamertemplate{sections/subsections in toc}[circle]
-#+Latex_Header: \setbeamertemplate{title page}[plain]
-#+Latex_Header: \setbeamertemplate{footline}[frame number]
 #+Latex_Header: \setbeamercolor{button}{fg=Tangerine}
 #+Latex_Header: \setbeamerfont{button}{size=\normal}
+
+## Structure
+#+Latex_Header: \setbeamertemplate{navigation symbols}{}
+#+Latex_Header: \setbeamertemplate{title page}[plain]
+#+Latex_Header: \setbeamertemplate{footline}[frame number]
 
 ## Do not number title page and outline frame.
 #+Bind: org-export-latex-title-command "\\thispagestyle{empty}\\maketitle"
 #+Bind: org-beamer-outline-frame-options "\\\\thispagestyle{empty}"
+
+## French outline title.
+#+Bind: org-beamer-outline-frame-title "Table des matières"
 
 ## Org beamer inserts title frame and outline automatically, reset
 ## frame counter.
@@ -65,44 +70,32 @@
 
 * Technologies fondatrices
 ** JavaScript
-*** Historique de JavaScript
+*** JavaScript \\ Historique
 	 - Langage de programmation des navigateurs web
 	 - Créé en 1995 par Brendan Eich de Netscape
 	 - Standardisé sous le nom d'ECMAScript in 19??
-	 - Possibilités limitées au début
-	 - Regain d'intérêt avec Ajax
+	 - Possibilités limitées, regain d'intérêt avec AJAX
 	 - Nombreux frameworks puissants (jQuery, CommonJS, Dojo)
 	 - Présent sur la majorité des sites d'aujourd'hui
 
-*** Caractéristiques de JavaScript
+*** JavaScript \\ Caractéristiques
 	 - Descend de Scheme et Self
 	 - Langage fonctionnel, dynamique
 	 - Faiblement typé, /closures/
 	 - Héritage par prototype
 	 - Syntaxe héritée du C
 
-*** Attraits de JavaScript
+	 #+ Bi-colonne
+	 Avantages :
 	 - Langage de haut niveau
 	 - Multi-plateforme (JVM sans installation)
 	 - Fonctionnalités asynchrones
 	 - Programmation évènementielle
 
-*** Inconvénients de JavaScript
-	 #+ Bicolonne avec exemples de code à droite
-	 - Tendance verbeuse
-	 - Globales implicites
-	 - Opérateurs d'égalité coercitifs
-
-*** CoffeeScript
-	 #+ Bicolonne avec exemples de code à droite
-	 - Langage intermédiaire qui compile vers JavaScript
-	 - Syntaxe empruntée au Ruby
-	 - Épuré et concis
-	 - Array comprehension, lambda function, bindings,
-		anonymous wrappers ...
+	 CoffeeScript : langage intermédiaire plus épuré
 
 ** Canvas HTML
-*** Surface de dessin
+*** Canvas HTML
 	 - Permet de dessiner et d'animer librement sur une page web
 	 - Contextes 2d et 3d
 	 - Alternative aux SVG plus performante
@@ -110,7 +103,7 @@
 	 - Pas d'insertion dans le DOM
 	 - Accélération matérielle possible
 
-*** Dessiner sur le canvas?
+*** Canvas \\ Exemples
 	 #+ Bi-colonne code à gauche rendu à droite
 
 ** WebSocket
@@ -128,20 +121,20 @@
 	 - Programmation événementielle
 	 - Nombreux modules dont Socket.IO
 
-*** Exemples de Node.js
+*** Node.js \\ Exemples
 	 - Serveur écho, chat, proxy ...
 
 * Derrière Spacewar
 ** Principe de jeu
-*** Principe de jeu
+*** Principe de jeu \\ Démonstration
 	 #+ Expliquer d'abord grossièrement, puis live demo.
 	 - Jeu d'action frénétique dans l'espace
 	 - À chaque joueur un vaisseau
-	 - But: tirer sur les autres et survivre
+	 - But : tirer sur les autres et survivre
 
 	 [[http://localhost:12345/][\beamergotobutton{Démonstration}]]
 
-*** Éléments du jeu
+*** Principe de jeu \\ Éléments du jeu
 	 - Contrôles simples :
 		- Tourner à gauche, à droite
 		- Avancer
@@ -153,33 +146,33 @@
 	 - Les bonus apportent de la variété (mines, turbo, bouclier, ...)
 
 ** Côté client
-*** Rôle du client
+*** Client \\ Rôle du client
 	 - Relayer les entrées claviers au serveur
 	 - Recevoir les messages du serveur
 	 - Afficher le jeu en temps réel
 		
 	Semblable à un terminal : toute la logique est côté serveur.
 
-*** Boucle de dessin
+*** Client \\ Boucle de dessin
 	 #+ Code à côté ?
 	 - Un jeu d'action requiert un rendu fluide (40 à 60 FPS)
 	 - Requiert de dessiner très rapidement une image
 	 - Canvas HTML
 
-*** Dessiner le tore
+*** Client \\ Dessiner le tore
 	 #+ Schéma
 	 Donner l'illusion d'une carte torique
 	 - Remplir le canvas de copies de la carte
 	 - Appliquer la logique au tore 
 	 - Considérer les entités les plus proches sur le tore
-*** Performance
+*** Client \\ Performance
 	 - Ne pas dessiner les objets hors champ
 	 - Sauvegarder les dessins coûteux dans des /sprites/
 	 - Optimisations de bas niveau hors de notre contrôle
 	 - Accélération matérielle du canvas
 
 ** Côté serveur
-*** Rôle du serveur
+*** Serveur \\ Rôle du serveur
 	 - Gérer la logique du jeu :
 		- Initialiser la carte de jeu
 		- Mouvoir les objets (vaisseaux, planètes, balles, ...)
@@ -187,7 +180,7 @@
 		- Résoudre ces collisions
 	 - Synchroniser l'information auprès des clients
 
-*** Communications clients-serveur
+*** Serveur \\ Communications clients-serveur
 	 Connexion d'un client :
 	 - Attribution d'un identifiant
 	 - Création d'un objet /Player/ associé
@@ -201,7 +194,7 @@
 	 - Notification aux autres clients
 	 - Libération des ressources associées
 
-*** Initialiser la carte de jeu
+*** Serveur \\ Initialiser la carte de jeu
 	 - Chargement du fichier de préférences :
 		- Dimensions de la carte
 		- Nombre de planètes à placer
@@ -211,7 +204,7 @@
 		#+ Schéma d'une planète + satellite + rayon total
 		#+ Ou bien screen d'une map
 
-*** Boucle principale
+*** Serveur \\ Boucle principale
 	 Étapes effectuées toutes les 20ms :
 	 - Agir en fonction des évènements clavier
 	 - Déplacer tous les objets
@@ -219,7 +212,7 @@
 	 - Récolter les changements d'état de chaque objet
 	 - Broadcaster les changements de tous les objets
 
-*** Gérer les collisions
+*** Serveur \\ Gérer les collisions
 	 - Traitement symétrique centralisé
 		#+ Côté : extrait de handleCollision
 	 - Approche naïve quadratique
