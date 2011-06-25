@@ -1,3 +1,4 @@
+#+ -*- mode: org; ispell-local-dictionary: "francais"; -*-
 #+Title: Élaboration d'un jeu multijoueur en HTML5
 #+Author: Florent Marchand de Kerchove
 #+Email: fmdkdd@gmail.com
@@ -5,20 +6,26 @@
 #+Language: fr
 
 ## Supplementary info.
-#+Latex_Header: \institute{Université du Havre}
+#+Beamer_Header_Extra: \institute{Université du Havre}
 
 ## Beamer slideshow.
 #+LATEX_CMD: xelatex
 #+LaTeX_CLASS: beamer
 #+Beamer_frame_level: 3
 
+## Structure
+#+Latex_Header: \setbeamertemplate{navigation symbols}{}
+#+Latex_Header: \setbeamertemplate{title page}[plain]
+#+Latex_Header: \setbeamertemplate{footline}[frame number]
+
 ## Styling
 #+Latex_Header: \setsansfont[Mapping=tex-text]{Optima LT Std}
 
-#+Latex_Header: \mode<presentation>
 #+Latex_Header: \definecolor{Backdrop}{RGB}{62, 62, 62}
 #+Latex_Header: \definecolor{Tangerine}{RGB}{223, 135, 47}
 #+Latex_Header: \definecolor{Tinkerbell}{RGB}{220, 220, 204}
+#+Latex_Header: \definecolor{Liloo}{RGB}{161, 219, 219}
+#+Latex_Header: \definecolor{Waterose}{RGB}{204, 147, 147}
 
 #+Latex_Header: \usecolortheme[named=Backdrop]{structure}
 #+Latex_Header: \setbeamercolor{normal text}{fg=Tinkerbell, bg=Backdrop}
@@ -30,14 +37,12 @@
 #+Latex_Header: \setbeamerfont{footline}{size=\small}
 
 #+Latex_Header: \setbeamertemplate{items}[circle]
+#+Latex_Header: \setbeamertemplate{itemize subitem}{--}
 #+Latex_Header: \setbeamertemplate{sections/subsections in toc}[circle]
-#+Latex_Header: \setbeamercolor{button}{fg=Tangerine}
-#+Latex_Header: \setbeamerfont{button}{size=\normal}
 
-## Structure
-#+Latex_Header: \setbeamertemplate{navigation symbols}{}
-#+Latex_Header: \setbeamertemplate{title page}[plain]
-#+Latex_Header: \setbeamertemplate{footline}[frame number]
+#+Latex_Header: \setbeamertemplate{blocks}[rounded][shadow=true]
+#+Latex_Header: \setbeamercolor{block title}{fg=Liloo, bg=Backdrop!110}
+#+Latex_Header: \setbeamercolor{block body}{fg=Tinkerbell, bg=Backdrop!95}
 
 ## Do not number title page and outline frame.
 #+Bind: org-export-latex-title-command "\\thispagestyle{empty}\\maketitle"
@@ -46,10 +51,35 @@
 ## French outline title.
 #+Bind: org-beamer-outline-frame-title "Table des matières"
 
+## Code listings
+#+Latex_Header: \usepackage{listings}
+
+#+Latex_Header: \lstset{basicstyle=\sffamily}
+#+Latex_Header: \lstset{tabsize=3, columns=fullflexible, keepspaces=true}
+#+Latex_Header: \lstset{breaklines=false, showstringspaces=false, xleftmargin=5pt}
+
+#+Latex_Header: \lstnewenvironment{javascript}
+#+Latex_Header: {\lstset{ language={C}, morekeywords={var, function}, stringstyle=\color{Waterose} }}{}
+
+#+Latex_Header: \lstnewenvironment{coffeescript}
+#+Latex_Header: {\lstset{ language={Ruby}, morekeywords={of}, stringstyle=\color{Waterose} }}{}
+#+Bind: org-export-latex-custom-lang-environments ((espresso "javascript") (coffee "coffeescript"))
+
+## Make fragile frame when using javascript environment.
+#+Bind: org-beamer-fragile-re "^[ \t]*\\\\begin{\\(coffeescript\\|javascript\\)}"
+
+## Graphics
+#+Latex_Header: \usepackage{tikz}
+#+Latex_Header: \usetikzlibrary{arrows}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Begin document
+
 ## Org beamer inserts title frame and outline automatically, reset
 ## frame counter.
 #+Beamer: \setcounter{framenumber}{0}
 
+## Print outline when changing section.
 #+BEGIN_lateX
 \AtBeginSection[] {
   \begin{frame}<beamer>{}
@@ -58,6 +88,7 @@
 }
 #+END_lateX
 
+## Introduction frame.
 #+BEGIN_lateX
   \begin{frame}{Intro}
   \begin{figure}[htb]
@@ -72,42 +103,45 @@
 ** JavaScript
 *** JavaScript \\ Historique
 	 - Langage de programmation des navigateurs web
-	 - Créé en 1995 par Brendan Eich de Netscape
-	 - Standardisé sous le nom d'ECMAScript in 19??
-	 - Possibilités limitées, regain d'intérêt avec AJAX
+	 - Créé en 1995 par Brendan Eich chez Netscape
+	 - Standardisé sous le nom d'ECMAScript en 1996
+	 - Initialement limité, regain d'intérêt avec AJAX
 	 - Nombreux frameworks puissants (jQuery, CommonJS, Dojo)
 	 - Présent sur la majorité des sites d'aujourd'hui
 
 *** JavaScript \\ Caractéristiques
 	 - Descend de Scheme et Self
-	 - Langage fonctionnel, dynamique
-	 - Faiblement typé, /closures/
+	 - Langage fonctionnel (fonctions de première classe, /closures)
+	 - Langage dynamique (faiblement typé, évalué à l'exécution)
 	 - Héritage par prototype
-	 - Syntaxe héritée du C
+	 - Syntaxe empruntée à Java
 
-	 #+ Bi-colonne
 	 Avantages :
 	 - Langage de haut niveau
-	 - Multi-plateforme (JVM sans installation)
+	 - Multi-plateforme (requiert un navigateur)
 	 - Fonctionnalités asynchrones
 	 - Programmation évènementielle
 
 	 CoffeeScript : langage intermédiaire plus épuré
 
 ** Canvas HTML
-*** Canvas HTML
+*** Canvas HTML \\ Description
+	 Élément <canvas> :
 	 - Permet de dessiner et d'animer librement sur une page web
-	 - Contextes 2d et 3d
-	 - Alternative aux SVG plus performante
-	 - Surface /bitmapped/ plutôt que vectoriel
+	 - Contextes 2d et 3d (WebGL)
+	 - API stable
+	 - Implémenté dans les navigateurs majeurs
+
+	 Alternative aux SVG plus performante :
+	 - Surface /bitmapped/ plutôt que vectorielle
 	 - Pas d'insertion dans le DOM
 	 - Accélération matérielle possible
 
-*** Canvas \\ Exemples
+*** Canvas HTML \\ Exemples
 	 #+ Bi-colonne code à gauche rendu à droite
 
 ** WebSocket
-*** Protocole WebSocket
+*** Protocole WebSocket \\ Description
 	 - Réponse du standard aux techniques Comet
 	 - Rend obsolète HTTP /long-polling/ et HTTP /streaming/
 	 - Véritable /full-duplex/ entre client et serveur HTTP
@@ -115,24 +149,62 @@
 	 - Protocole en évolution
 
 ** Node.js
-*** Node.js
+*** Node.js \\ Description
 	 - Serveur performant écrit en JavaScript
-	 - Entrées/sorties asynchrones
+	 - Fournit une API réseau élémentaire
+	 - Utilise le moteur JavaScript V8 de Google
+	 - Entrées/sorties asynchrones (/epoll/, /kqueue/, ...)
 	 - Programmation événementielle
-	 - Nombreux modules dont Socket.IO
+	 - Nombreux modules dont Socket.IO pour les WebSocket
 
 *** Node.js \\ Exemples
-	 - Serveur écho, chat, proxy ...
+	 #+begin_latex
+	 \begin{overprint}
+
+	 \onslide<1>
+	 \begin{block}{Serveur écho}
+	 \begin{javascript}
+var net = require('net');
+
+var server = net.createServer(function (socket) {
+	socket.write("Echo server");
+	socket.pipe(socket);
+});
+	 \end{javascript}
+	 \end{block}
+
+	 \onslide<2>
+	 \begin{block}{Serveur http}
+	 \begin{javascript}
+var http = require('http');
+
+http.createServer(function (req, res) {
+	res.writeHead(200, {'Content-Type': 'text/plain'});
+	res.end('Hello World');
+}).listen(1337, "127.0.0.1");
+	 \end{javascript}
+	 \end{block}
+
+	 \end{overprint}
+	 #+end_latex
 
 * Derrière Spacewar
 ** Principe de jeu
 *** Principe de jeu \\ Démonstration
 	 #+ Expliquer d'abord grossièrement, puis live demo.
+	 Principe de Spacewar :
 	 - Jeu d'action frénétique dans l'espace
 	 - À chaque joueur un vaisseau
 	 - But : tirer sur les autres et survivre
 
-	 [[http://localhost:12345/][\beamergotobutton{Démonstration}]]
+	 #+Latex: \vfill
+
+	 #+begin_latex
+	 \begin{center}
+	 \tikz \node [draw=none, fill=Liloo!50!black, inner sep=1.5mm, rounded corners=2.5mm]
+	   {\href{http://localhost:12345/}{$\blacktriangleright$ Démonstration}};
+	 \end{center}
+	 #+end_latex
 
 *** Principe de jeu \\ Éléments du jeu
 	 - Contrôles simples :
@@ -154,22 +226,123 @@
 	Semblable à un terminal : toute la logique est côté serveur.
 
 *** Client \\ Boucle de dessin
-	 #+ Code à côté ?
-	 - Un jeu d'action requiert un rendu fluide (40 à 60 FPS)
-	 - Requiert de dessiner très rapidement une image
-	 - Canvas HTML
+	 #+begin_latex
+	 \begin{columns}
+	 \begin{column}{0.5\textwidth}
+	 \vskip-90pt
+	 \begin{itemize}
+	 \item Un jeu d'action exige un rendu fluide (40 à 60 FPS)
+	 \item Requiert de dessiner très rapidement une frame
+	 \item Utilise uniquement le canvas HTML
+	 \end{itemize}
+	 \end{column}
+
+	 \begin{column}{0.54\textwidth}
+	 \begin{block}{}
+	 \lstset{basicstyle=\sffamily\small}
+	 \begin{coffeescript}
+redraw = (context) ->
+	context.clearCanvas()
+
+	centerView()
+
+	for obj in gameObjects
+		obj.draw(context) if obj.inView()
+
+	for e in effects
+		e.draw(context) if e.inView()
+
+	drawInfinity(context)
+
+	drawUI(context)
+	 \end{coffeescript}
+	 \end{block}
+	 \end{column}
+	 \end{columns}
+	 #+end_latex
 
 *** Client \\ Dessiner le tore
-	 #+ Schéma
-	 Donner l'illusion d'une carte torique
+	 Donner l'illusion d'une carte torique :
 	 - Remplir le canvas de copies de la carte
-	 - Appliquer la logique au tore 
 	 - Considérer les entités les plus proches sur le tore
+	 - Appliquer la logique de jeu au tore côté serveur
+
+    #+BEGIN_latex
+	 \begin{overprint}
+	 \onslide<1>
+      \begin{center}
+        \centering
+        \begin{tikzpicture}[scale=0.8]
+          \begin{scope}
+            \fill [Waterose, opacity=.8]
+              (0,1.2) rectangle +(.75,1.3);
+      
+            \draw [Waterose, thick]
+              (0,0) rectangle +(2.5,2.5)
+              node [anchor=south east] {Carte};
+      
+            \draw [Liloo, thick]
+              (-.75,1.2) rectangle +(1.5,1.5)
+              node [anchor=south east] {Canvas};
+          \end{scope}
+      
+          \draw [thick, ->, >=stealth']
+            (3.5,2.5) to (5.5,2.5)
+            node [above, midway] {drawInfinity};
+      
+          \begin{scope}[xshift=9cm]
+            \fill [Waterose, opacity=0.8]
+              (0,1.2) rectangle +(.75,1.3);
+            \fill [Waterose, opacity=0.5]
+              (-.75,1.2) rectangle +(.75,1.3);
+            \fill [Waterose, opacity=0.5]
+              (-.75,2.5) rectangle +(1.5,.2);
+      
+            \draw [Waterose, thick]
+              (0,0) rectangle +(2.5,2.5);
+      
+            \draw [Waterose, opacity=.7, thick]
+              (-2.5,0) rectangle +(2.5,2.5)
+              (-2.5,2.5) rectangle +(2.5,2.5)
+              (0,2.5) rectangle +(2.5,2.5);
+      
+            \draw [Liloo, thick]
+              (-.75,1.2) rectangle +(1.5,1.5);
+          \end{scope}
+        \end{tikzpicture}
+      \end{center}
+
+	 \onslide<2>
+      \begin{center}
+        \begin{tikzpicture}[scale=1.3]
+          \draw [Waterose, thick]
+            (0,0) rectangle +(2.5,2.5)
+            node [anchor=south east] {Carte};
+          \draw [Waterose, opacity=0.7, thick]
+            (-2.5,0) rectangle +(2.5,2.5);
+      
+          \fill [Tinkerbell] (2.3,2.2) circle (3pt)
+            node [anchor=east, xshift=-1mm, yshift=.3mm] {Ennemi};
+          \fill [Tinkerbell, opacity=0.7] (-0.2,2.2) circle (3pt)
+            node [anchor=east, xshift=-1mm, yshift=.5mm] {Fantôme};
+      
+          \draw [Liloo, thick]
+            (-.5,.2) rectangle +(1.5,1.5)
+            node [at start, anchor=south east, yshift=-1.5mm] {Canvas};
+      
+          \fill [Liloo]
+            (.25,.95) circle (3pt);
+        \end{tikzpicture}
+      \end{center}
+	 \end{overprint}
+    #+END_latex		
+
 *** Client \\ Performance
+	 Comment optimiser le dessin sur le client ?
 	 - Ne pas dessiner les objets hors champ
 	 - Sauvegarder les dessins coûteux dans des /sprites/
 	 - Optimisations de bas niveau hors de notre contrôle
-	 - Accélération matérielle du canvas
+	 - Accélération matérielle fournie par les navigateurs
 
 ** Côté serveur
 *** Serveur \\ Rôle du serveur
@@ -201,8 +374,17 @@
 		- Taille des planètes, des satellites
 		- Vitesse et distance des satellites
 	 - Placement aléatoire sans chevauchements
-		#+ Schéma d'une planète + satellite + rayon total
-		#+ Ou bien screen d'une map
+
+	 #+Begin_latex
+      \begin{center}
+        \begin{tikzpicture}
+          \draw [Liloo, opacity=1, thick] (0,0) circle (1cm);
+          \draw [Liloo, opacity=1, thick] (1.1, 1.1) circle (.3cm);
+          \draw [Waterose, opacity=1, thick] (0,0) circle (1.87cm);
+        \end{tikzpicture}
+      \end{center}
+      
+	 #+End_latex
 
 *** Serveur \\ Boucle principale
 	 Étapes effectuées toutes les 20ms :
@@ -213,30 +395,38 @@
 	 - Broadcaster les changements de tous les objets
 
 *** Serveur \\ Gérer les collisions
-	 - Traitement symétrique centralisé
-		#+ Côté : extrait de handleCollision
+	 Traitement symétrique centralisé :
+	 #+Begin_latex
+	 \begin{block}{}
+	 \begin{coffeescript}
+'ship-mine': (ship, mine) ->
+	ship.explode()
+	mine.nextState() if mine.state is 'active'\end{coffeescript}
+	 \end{block}
+	 #+End_latex
+
+	 Algorithme performant crucial :
 	 - Approche naïve quadratique
 	 - Vérification des collisions entre voisins
 	 - Découpage de la carte en grille
 
 *** Améliorations envisagées
-	 - Instanciation des parties
+	 - Instanciation des parties :
 		- Rejoindre une partie aléatoire ou entre amis
 		- Création de parties personnalisées
 	 - Communication entre joueurs
-	 - Optimisations serveur
+	 - Optimisations serveur :
 		- Diminuer le coût des collisions
 		- Permettre un plus grand nombre de joueur simultanés
 
 *** Améliorations envisagées (2)
-	 - Optimisations client
+	 - Optimisations client :
 		- Dessiner plus rapidement
 		- Améliorer la compatibilité avec tous les navigateurs
-	 - Éléments de jeu supplémentaires
+	 - Éléments de jeu supplémentaires :
 		- Bonus (bouclier, missile)
 		- Contenu solo
 		- Mesure de progrès (score, statistiques)
-
 
 *** Merci
 	 #+Begin_beamer
