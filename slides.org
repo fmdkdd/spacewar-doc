@@ -6,11 +6,12 @@
 #+Language: fr
 
 ## Supplementary info.
-#+Beamer_Header_Extra: \institute{Université du Havre}
+#+Beamer_Header_Extra: \institute{Faculté des sciences et techniques\\Université du Havre}
 
 ## Beamer slideshow.
 #+LATEX_CMD: xelatex
 #+LaTeX_CLASS: beamer
+#+OPTIONS: toc:nil
 #+Beamer_frame_level: 3
 
 ## Structure
@@ -44,12 +45,8 @@
 #+Latex_Header: \setbeamercolor{block title}{fg=Liloo, bg=Backdrop!110}
 #+Latex_Header: \setbeamercolor{block body}{fg=Tinkerbell, bg=Backdrop!95}
 
-## Do not number title page and outline frame.
+## Do not number title page frame.
 #+Bind: org-export-latex-title-command "\\thispagestyle{empty}\\maketitle"
-#+Bind: org-beamer-outline-frame-options "\\\\thispagestyle{empty}"
-
-## French outline title.
-#+Bind: org-beamer-outline-frame-title "Table des matières"
 
 ## Code listings
 #+Latex_Header: \usepackage{listings}
@@ -76,13 +73,15 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Begin document
 
-## Org beamer inserts title frame and outline automatically, reset
+## Org beamer inserts title frame automatically, reset
 ## frame counter.
 #+Beamer: \setcounter{framenumber}{0}
 
 ## Print outline when changing section.
 #+BEGIN_lateX
 \AtBeginSection[] {
+  \thispagestyle{empty}
+  \addtocounter{framenumber}{-1}
   \begin{frame}<beamer>{}
     \tableofcontents[currentsection]
   \end{frame}
@@ -97,6 +96,16 @@
   \end{center}
   \end{frame}
 #+END_latex
+
+## Outline after intro.
+#+Begin_latex
+\setcounter{framenumber}{0}
+\begin{frame}\thispagestyle{empty}
+\frametitle{Table des matières}
+\setcounter{tocdepth}{3}
+\tableofcontents
+\end{frame}
+#+End_latex
 
 * Technologies fondatrices
 ** JavaScript
