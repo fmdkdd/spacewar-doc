@@ -57,6 +57,7 @@
 #+Latex_Header: \lstset{basicstyle=\sffamily}
 #+Latex_Header: \lstset{tabsize=3, columns=fullflexible, keepspaces=true}
 #+Latex_Header: \lstset{breaklines=false, showstringspaces=false, xleftmargin=5pt}
+#+Latex_Header: \lstset{aboveskip=0, belowskip=0}
 
 #+Latex_Header: \lstnewenvironment{javascript}
 #+Latex_Header: {\lstset{ language={C}, morekeywords={var, function}, stringstyle=\color{Waterose} }}{}
@@ -91,11 +92,9 @@
 ## Introduction frame.
 #+BEGIN_lateX
   \begin{frame}{Intro}
-  \begin{figure}[htb]
-    \centering
-    \includegraphics[width=10cm]{img/glorious-action-shot.png}
-  \end{figure}
-  [Glorious screenshot!] [Rationale]
+  \begin{center}
+    \includegraphics[width=10.5cm]{img/glorious-action-shot.png}
+  \end{center}
   \end{frame}
 #+END_latex
 
@@ -137,8 +136,45 @@
 	 - Pas d'insertion dans le DOM
 	 - Accélération matérielle possible
 
-*** Canvas HTML \\ Exemples
-	 #+ Bi-colonne code à gauche rendu à droite
+*** Canvas HTML \\ Exemple
+    #+Begin_latex
+	 \begin{columns}
+	 \begin{column}{0.5\textwidth}
+    \begin{block}{}
+	 \lstset{basicstyle=\sffamily\scriptsize, aboveskip=0, belowskip=0}
+	 \begin{javascript}
+function init() {
+	var canvas =
+      document.querySelector('#canvas');
+	var ctxt = canvas.getContext('2d');
+	ctxt.fillStyle = 'hsl(40, 30%, 90%)';
+	ctxt.fillRect(0,0,300,300);
+	
+	for (var i=0; i < 10; ++i) {
+		ctxt.save();
+		ctxt.translate(Math.random()*250,
+                          Math.random()*250);
+		ctxt.fillStyle = 'hsla(' +
+          Math.random()*360 +
+          ', 50%, 50%, 0.8)';
+      ctxt.beginPath();
+		ctxt.arc(24, 24, 12 + 12*Math.sin(i),
+          Math.PI*2, false);
+		ctxt.fill();
+		ctxt.restore();
+	}
+}
+	 \end{javascript}
+    \end{block}
+	 \end{column}
+
+    \begin{column}{0.5\textwidth}
+    \begin{center}
+    \includegraphics[width=\textwidth]{img/canvas-ex1.png}
+    \end{center}
+    \end{column}
+    \end{columns}
+    #+End_latex
 
 ** WebSocket
 *** Protocole WebSocket \\ Description
@@ -268,6 +304,7 @@ redraw = (context) ->
 	 - Appliquer la logique de jeu au tore côté serveur
 
     #+BEGIN_latex
+    \vfill
 	 \begin{overprint}
 	 \onslide<1>
       \begin{center}
@@ -376,6 +413,7 @@ redraw = (context) ->
 	 - Placement aléatoire sans chevauchements
 
 	 #+Begin_latex
+    \vfill
       \begin{center}
         \begin{tikzpicture}
           \draw [Liloo, opacity=1, thick] (0,0) circle (1cm);
@@ -427,6 +465,10 @@ redraw = (context) ->
 		- Bonus (bouclier, missile)
 		- Contenu solo
 		- Mesure de progrès (score, statistiques)
+
+    #+Latex: \vfill
+    
+    Autant de prétextes pour apprendre
 
 *** Merci
 	 #+Begin_beamer
