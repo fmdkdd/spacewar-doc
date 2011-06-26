@@ -91,7 +91,7 @@
 
 ## Introduction frame.
 #+BEGIN_lateX
-  \begin{frame}{Intro}
+  \begin{frame}{Introduction}
   \begin{center}
     \includegraphics[width=10.5cm]{img/glorious-action-shot.png}
   \end{center}
@@ -110,7 +110,7 @@
 
 *** JavaScript \\ Caractéristiques
 	 - Descend de Scheme et Self
-	 - Langage fonctionnel (fonctions de première classe, /closures)
+	 - Langage fonctionnel (fonctions de première classe, /closures/)
 	 - Langage dynamique (faiblement typé, évalué à l'exécution)
 	 - Héritage par prototype
 	 - Syntaxe empruntée à Java
@@ -119,7 +119,7 @@
 	 - Langage de haut niveau
 	 - Multi-plateforme (requiert un navigateur)
 	 - Fonctionnalités asynchrones
-	 - Programmation évènementielle
+	 - Programmation événementielle
 
 	 CoffeeScript : langage intermédiaire plus épuré
 
@@ -191,7 +191,7 @@ function init() {
 	 - Utilise le moteur JavaScript V8 de Google
 	 - Entrées/sorties asynchrones (/epoll/, /kqueue/, ...)
 	 - Programmation événementielle
-	 - Nombreux modules dont Socket.IO pour les WebSocket
+	 - Nombreux modules dont Socket.IO pour WebSocket
 
 *** Node.js \\ Exemples
 	 #+begin_latex
@@ -430,7 +430,7 @@ redraw = (context) ->
 	 - Déplacer tous les objets
 	 - Détecter et résoudre les collisions
 	 - Récolter les changements d'état de chaque objet
-	 - Broadcaster les changements de tous les objets
+	 - Diffuser les changements de tous les objets
 
 *** Serveur \\ Gérer les collisions
 	 Traitement symétrique centralisé :
