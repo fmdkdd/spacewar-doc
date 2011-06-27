@@ -83,6 +83,7 @@
   \thispagestyle{empty}
   \addtocounter{framenumber}{-1}
   \begin{frame}<beamer>{}
+    \vspace{2.7em}
     \tableofcontents[currentsection]
   \end{frame}
 }
@@ -110,7 +111,7 @@
 * Technologies fondatrices
 ** JavaScript
 *** JavaScript \\ Historique
-	 - Langage de programmation des navigateurs web
+	 - Langage de script des navigateurs web
 	 - Créé en 1995 par Brendan Eich chez Netscape
 	 - Standardisé sous le nom d'ECMAScript en 1996
 	 - Initialement limité, regain d'intérêt avec AJAX
@@ -147,7 +148,7 @@
 
 *** Canvas HTML \\ Exemple
     #+Begin_latex
-	 \begin{columns}
+	 \begin{columns}p
 	 \begin{column}{0.5\textwidth}
     \begin{block}{}
 	 \lstset{basicstyle=\sffamily\scriptsize, aboveskip=0, belowskip=0}
@@ -159,7 +160,7 @@ function init() {
 	ctxt.fillStyle = 'hsl(40, 30%, 90%)';
 	ctxt.fillRect(0,0,300,300);
 	
-	for (var i=0; i < 10; ++i) {
+	for (var i=0; i < 100; ++i) {
 		ctxt.save();
 		ctxt.translate(Math.random()*250,
                           Math.random()*250);
@@ -188,7 +189,7 @@ function init() {
 ** WebSocket
 *** Protocole WebSocket \\ Description
 	 - Réponse du standard aux techniques Comet
-	 - Rend obsolète HTTP /long-polling/ et HTTP /streaming/
+	 - Rend obsolètes HTTP /long-polling/ et HTTP /streaming/
 	 - Véritable /full-duplex/ entre client et serveur HTTP
 	 - Mise à jour de la connexion TCP créée pour la requête HTTP
 	 - Protocole en évolution
@@ -214,7 +215,7 @@ var net = require('net');
 var server = net.createServer(function (socket) {
 	socket.write("Echo server");
 	socket.pipe(socket);
-});
+}).listen(1337);
 	 \end{javascript}
 	 \end{block}
 
@@ -399,20 +400,6 @@ redraw = (context) ->
 		- Résoudre ces collisions
 	 - Synchroniser l'information auprès des clients
 
-*** Serveur \\ Communications clients-serveur
-	 Connexion d'un client :
-	 - Attribution d'un identifiant
-	 - Création d'un objet /Player/ associé
-	 - Envoi de tous les objets de jeu
-
-	 Durant la partie :
-	 - Les clients envoient leurs entrées clavier
-	 - Le serveur broadcast les changements
-
-	 Déconnexion d'un client :
-	 - Notification aux autres clients
-	 - Libération des ressources associées
-
 *** Serveur \\ Initialiser la carte de jeu
 	 - Chargement du fichier de préférences :
 		- Dimensions de la carte
@@ -448,14 +435,52 @@ redraw = (context) ->
 	 \begin{coffeescript}
 'ship-mine': (ship, mine) ->
 	ship.explode()
-	mine.nextState() if mine.state is 'active'\end{coffeescript}
+	mine.explode()\end{coffeescript}
 	 \end{block}
 	 #+End_latex
 
+*** Serveur \\ Gérer les collisions (2)
 	 Algorithme performant crucial :
 	 - Approche naïve quadratique
 	 - Vérification des collisions entre voisins
 	 - Découpage de la carte en grille
+
+	 #+Begin_latex
+	 \vfill
+	 \begin{center}
+        \begin{tikzpicture}[scale=0.7]
+          \fill [Liloo, opacity=0.3]
+            (.5,1) rectangle +(2,1.5)
+            (1,2.5) rectangle +(1.5,.5)
+            (3,2.5) rectangle +(1.5,1.5);
+
+          \draw [Waterose, thick]
+            (0,0) rectangle +(5,5)
+            node [anchor=south east] {Carte};
+
+          \draw [Waterose, opacity=0.5, thick, step=.5]
+            (0,0) grid +(5,5);
+
+          \draw [Liloo, thick]
+            (3.7,3.3) circle (.5)
+            (1.6,1.9) circle (.8);
+        \end{tikzpicture}
+	 \end{center}
+	 #+End_latex
+
+*** Serveur \\ Communications clients-serveur
+	 Connexion d'un client :
+	 - Attribution d'un identifiant
+	 - Création d'un objet /Player/ associé
+	 - Envoi de tous les objets de jeu
+
+	 Durant la partie :
+	 - Les clients envoient leurs entrées clavier
+	 - Le serveur broadcast les changements
+
+	 Déconnexion d'un client :
+	 - Notification aux autres clients
+	 - Libération des ressources associées
 
 *** Améliorations envisagées
 	 - Instanciation des parties :
