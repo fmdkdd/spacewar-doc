@@ -148,7 +148,7 @@
 
 *** Canvas HTML \\ Exemple
     #+Begin_latex
-	 \begin{columns}p
+	 \begin{columns}
 	 \begin{column}{0.5\textwidth}
     \begin{block}{}
 	 \lstset{basicstyle=\sffamily\scriptsize, aboveskip=0, belowskip=0}
